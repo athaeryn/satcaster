@@ -1,0 +1,20 @@
+#ifndef __SC_CAMERA_HEADER_INCLUDE__
+#define __SC_CAMERA_HEADER_INCLUDE__
+
+#include <iostream>
+#include <Eigen/Dense>
+
+using namespace std;
+using Eigen::Vector3f;
+
+class Camera {
+public:
+  Camera(float x, float y, float z);
+  string get_position_string();
+  void lookAt(const Vector3f *point);
+private:
+    Vector3f center;
+    Vector3f lookTarget;
+};
+
+#endif
