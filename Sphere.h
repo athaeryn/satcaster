@@ -8,10 +8,11 @@ using Eigen::Vector3f;
 
 class Sphere {
 public:
-  Sphere(float x, float y, float z);
-  string get_position_string();
+  Sphere(Vector3f center, float radius);
+  string to_string();
 private:
-  Vector3f center;
+  Vector3f pos;
+  float r;
 };
 
 #endif

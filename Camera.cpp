@@ -1,15 +1,16 @@
 #include "Camera.h"
 
-Camera::Camera(float x, float y, float z) {
-  center = Vector3f(x, y, z);
+Camera::Camera(Vector3f center) {
+  pos = center;
+  lookTarget = Vector3f(0, 0, 0);
 }
 
-string Camera::get_position_string() {
-  return "(X:" + to_string(center[0])
-      +  " Y:" + to_string(center[1])
-      +  " Z:" + to_string(center[2]) + ")";
+string Camera::to_string() {
+  return "<Camera pos:[" + std::to_string(pos[0])
+      +  ", " + std::to_string(pos[1])
+      +  ", " + std::to_string(pos[2]) + "]>";
 }
 
 void Camera::lookAt(const Vector3f *point) {
-  cout << "camera looking at (" << (*point)[0] << ", " << (*point)[1] << ", " << (*point)[2] << ")" << endl;
+  lookTarget = *point;
 }

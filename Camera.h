@@ -9,12 +9,12 @@ using Eigen::Vector3f;
 
 class Camera {
 public:
-  Camera(float x, float y, float z);
-  string get_position_string();
+  Camera(Vector3f center);
+  string to_string();
   void lookAt(const Vector3f *point);
 private:
-    Vector3f center;
-    Vector3f lookTarget;
+  Vector3f pos;
+  Vector3f lookTarget;
 };
 
 #endif

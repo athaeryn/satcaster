@@ -1,11 +1,13 @@
 #include "Sphere.h"
 
-Sphere::Sphere(float x, float y, float z) {
-  center = Vector3f(x, y, z);
+Sphere::Sphere(Vector3f center, float radius) {
+  pos = center;
+  r = radius;
 }
 
-string Sphere::get_position_string() {
-  return "(X:" + to_string(center[0])
-      +  " Y:" + to_string(center[1])
-      +  " Z:" + to_string(center[2]) + ")";
+string Sphere::to_string() {
+  return "<Sphere r:" + std::to_string(r)
+      +  " pos:[" + std::to_string(pos[0])
+      +  ", "     + std::to_string(pos[1])
+      +  ", "     + std::to_string(pos[2]) + "]>";
 }
