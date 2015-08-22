@@ -7,11 +7,20 @@ from vec3 import vec3
 from lib.camera import Camera
 from lib.sphere import Sphere
 
-if __name__ == "__main__":
-    s = Sphere()
 
-    cam = Camera(vec3(0, 0, -10))
+def render(camera, objects):
+    pass
+    # for y in range(4):
+    #     for x in range (4):
+    #         print(x, y)
+
+
+if __name__ == "__main__":
+    s = Sphere(vec3(0, 0, -10))
+    cam = Camera()
     cam.lookat(s.pos)
 
-    print(cam.log(), file=sys.stderr)
-    print(s.log(), file=sys.stderr)
+    render(cam, [s])
+
+    print(str(cam), file=sys.stderr)
+    print(str(s), file=sys.stderr)

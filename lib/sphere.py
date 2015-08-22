@@ -6,10 +6,7 @@ class Sphere:
         self.pos = pos
         self.r = r
 
-    def log(self):
-        return "<Sphere r=[%s] pos=[%s, %s, %s]>".format(
-                    self.r,
-                    self.pos.x,
-                    self.pos.y,
-                    self.pos.z
-                )
+    def __str__(self):
+        return "<Sphere pos" + \
+                repr(tuple(self.pos)) + \
+                " r(" + str(self.r) + ")]>"
