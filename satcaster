@@ -7,8 +7,10 @@ from lib.sphere import Sphere
 
 if __name__ == "__main__":
     print("Later, World...")
-    cam = Camera(vec3(0, 1, 0))
-    cam.log()
-
     s = Sphere()
+
+    cam = Camera(vec3(0, 0, -10))
+    cam.lookat(s.pos)
+
+    cam.log()
     s.log()
