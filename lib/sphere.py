@@ -7,5 +7,9 @@ class Sphere:
         self.r = r
 
     def log(self):
-        print("<Sphere r=[%s] pos=[%s, %s, %s]>" %
-              (self.r, self.pos.x, self.pos.y, self.pos.z))
+        return "<Sphere r=[%s] pos=[%s, %s, %s]>".format(
+                    self.r,
+                    self.pos.x,
+                    self.pos.y,
+                    self.pos.z
+                )

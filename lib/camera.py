@@ -10,6 +10,11 @@ class Camera:
         self.looktarget = target
 
     def log(self):
-        print("<Camera pos=[%s, %s, %s] target=[%s, %s, %s]>" %
-              (self.pos.x, self.pos.y, self.pos.z,
-               self.looktarget.x, self.looktarget.y, self.looktarget.z))
+        return "<Camera pos=[%s, %s, %s] target=[%s, %s, %s]>".format(
+                    self.pos.x,
+                    self.pos.y,
+                    self.pos.z,
+                    self.looktarget.x,
+                    self.looktarget.y,
+                    self.looktarget.z
+                )

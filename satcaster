@@ -1,16 +1,17 @@
 #! /usr/bin/env python3
 
+import sys
+
 from vec3 import vec3
 
 from lib.camera import Camera
 from lib.sphere import Sphere
 
 if __name__ == "__main__":
-    print("Later, World...")
     s = Sphere()
 
     cam = Camera(vec3(0, 0, -10))
     cam.lookat(s.pos)
 
-    cam.log()
-    s.log()
+    print(cam.log(), file=sys.stderr)
+    print(s.log(), file=sys.stderr)
