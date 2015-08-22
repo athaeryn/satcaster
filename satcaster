@@ -1,6 +1,9 @@
 #! /usr/bin/env python3
 
 import sys
+import time
+
+from PIL import Image
 
 from vec3 import vec3
 
@@ -8,11 +11,14 @@ from lib.camera import Camera
 from lib.sphere import Sphere
 
 
-def render(camera, objects):
-    pass
-    # for y in range(4):
-    #     for x in range (4):
-    #         print(x, y)
+def render(w, h, camera, objects):
+    image = Image.new("1", (w, h))
+    # output = []
+    for y in range(h):
+        for x in range (w):
+            image.putpixel((x, y), 0)
+            # output.append(0)
+    return image
 
 
 if __name__ == "__main__":
@@ -20,7 +26,10 @@ if __name__ == "__main__":
     cam = Camera()
     cam.lookat(s.pos)
 
-    render(cam, [s])
-
     print(str(cam), file=sys.stderr)
     print(str(s), file=sys.stderr)
+
+    frame = render(500, 500, cam, [s])
+
+    frame.save("./renders/" + str(int(time.time())) + ".bmp")
+    # print("".join([str(x) for x in frame]))
