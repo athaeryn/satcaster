@@ -10,3 +10,7 @@ pip3 install -r requirements.txt
 ./satcaster
 ```
 
+http://ilan.schnell-web.net/prog/vec3/
+http://www.cosinekitty.com/raytrace/
+http://www.numpy.org/
+
