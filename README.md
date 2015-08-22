@@ -3,11 +3,10 @@ satcaster
 
 I have no idea what I'm doing.
 
+You'll need Python 3.
+
 ```sh
-brew install eigen
-mkdir build
-cd build
-cmake ../
-make
+pip3 install -r requirements.txt
+./satcaster
 ```
 
