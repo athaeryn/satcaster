@@ -1,7 +1,7 @@
 satcaster
 =========
 
-I have no idea what I'm doing.
+![render](renders/1440283952.bmp)
 
 You'll need Python 3.
 
@@ -10,7 +10,7 @@ pip3 install -r requirements.txt
 ./satcaster
 ```
 
-http://ilan.schnell-web.net/prog/vec3/
-http://www.cosinekitty.com/raytrace/
-http://www.numpy.org/
+- http://ilan.schnell-web.net/prog/vec3/
+- http://www.cosinekitty.com/raytrace/
+- http://www.numpy.org/
 
