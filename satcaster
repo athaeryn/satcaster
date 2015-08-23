@@ -3,6 +3,7 @@
 import sys
 import time
 
+import numpy as np
 from PIL import Image
 
 from vec3 import vec3
@@ -11,25 +12,38 @@ from lib.camera import Camera
 from lib.sphere import Sphere
 
 
+def get_intersection(ray, sphere):
+    (vantage, direction) = ray
+    displacement = sphere.pos - vantage
+    a = np.linalg.norm(direction) ** 2
+    b = 2 * np.dot(direction, displacement)
+    c = np.linalg.norm(displacement) ** 2 - sphere.r ** 2
+    radicand = b * b - 4 * a * c
+
+    if radicand >= 0:
+        return 1
+    else:
+        return 0
+
+
 def render(w, h, camera, objects):
     image = Image.new("1", (w, h))
-    # output = []
     for y in range(h):
         for x in range (w):
-            image.putpixel((x, y), 0)
-            # output.append(0)
+            nx = (2 * (x + .5) / w) - 1
+            ny = 1 - (2 * (y + .5) / h)
+            direc = vec3(nx, ny, 0) + camera.pos + camera.direction
+            direc = direc / np.linalg.norm(direc)
+            ray = (camera.pos, direc)
+            pixel = get_intersection(ray, objects[0])
+            image.putpixel((x, y), pixel)
     return image
 
 
 if __name__ == "__main__":
-    s = Sphere(vec3(0, 0, -10))
+    s = Sphere(vec3(0, 0, -10), 5)
     cam = Camera()
     cam.lookat(s.pos)
 
-    print(str(cam), file=sys.stderr)
-    print(str(s), file=sys.stderr)
-
     frame = render(500, 500, cam, [s])
-
     frame.save("./renders/" + str(int(time.time())) + ".bmp")
-    # print("".join([str(x) for x in frame]))
