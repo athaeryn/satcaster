@@ -35,15 +35,18 @@ def render(w, h, camera, objects):
             direc = vec3(nx, ny, 0) + camera.pos + camera.direction
             direc = direc / np.linalg.norm(direc)
             ray = (camera.pos, direc)
-            pixel = get_intersection(ray, objects[0])
+            intersections = [get_intersection(ray, obj) for obj in objects]
+            pixel = 1 in intersections
             image.putpixel((x, y), pixel)
     return image
 
 
 if __name__ == "__main__":
-    s = Sphere(vec3(0, 0, -10), 5)
-    cam = Camera()
-    cam.lookat(s.pos)
+    spheres = []
+    spheres.append(Sphere(vec3(-0.4422, -0.45858, -10), 3.411))
+    spheres.append(Sphere(vec3(8.00697, 2.52354, -13.31947), 0.751))
+    cam = Camera(vec3(0, 0, 0))
+    cam.lookat(vec3(0, 0, -10))
 
-    frame = render(500, 500, cam, [s])
+    frame = render(500, 500, cam, spheres)
     frame.save("./renders/" + str(int(time.time())) + ".bmp")
