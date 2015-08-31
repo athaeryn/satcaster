@@ -1,16 +1,13 @@
 satcaster
 =========
 
-![render](renders/1440306878.bmp)
-
-You'll need Python 3.
+![render](renders/1440914579.bmp)
 
 ```sh
-pip3 install -r requirements.txt
-./satcaster
+mkdir build
+cd build
+cmake ..
+cd ..
+make -C build
 ```
-
-- http://ilan.schnell-web.net/prog/vec3/
-- http://www.cosinekitty.com/raytrace/
-- http://www.numpy.org/
 
