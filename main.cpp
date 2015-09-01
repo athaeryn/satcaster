@@ -21,9 +21,10 @@ bool does_intersect(Vec3 start, Vec3 dir, Sphere sphere) {
 }
 
 void render(int buffer[], int w, int h, Camera camera, vector<Sphere> spheres) {
+  float aspect = w / h;
   for (int y = 0; y < h; y++) {
     for (int x = 0; x < w; x++) {
-      float nx = (2 * (x + .5) / w) - 1;
+      float nx = ((2 * (x + .5) / w) - 1) * aspect;
       float ny = 1 - (2 * (y + .5) / h);
       Vec3 ray = norm(add(add(vec::make(nx, ny, 0), camera.pos), camera.dir));
 
