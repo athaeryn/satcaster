@@ -3,20 +3,13 @@
 #include <iostream>
 #include <vector>
 
+#include "Camera.h"
+#include "Sphere.h"
 #include "Vec3.h"
 
 using namespace std;
 using namespace vec;
 
-struct Sphere {
-  Vec3 pos;
-  float r;
-};
-
-struct Camera {
-  Vec3 pos;
-  Vec3 dir;
-};
 
 bool does_intersect(Vec3 start, Vec3 dir, Sphere sphere) {
   Vec3 displacement = sub(sphere.pos, start);
@@ -47,25 +40,25 @@ void render(int buffer[], int w, int h, Camera camera, vector<Sphere> spheres) {
 
 int main() {
   vector<Sphere> spheres;
-  Sphere sphere1 = {vec::make(0, 0, -10), 4};
-  spheres.push_back(sphere1);
+  spheres.push_back(Sphere(vec::make(0, 0, -10), 4));
+  spheres.push_back(Sphere(vec::make(8, 4, -13), 1));
 
-  Sphere sphere2 = {vec::make(8, 4, -13), 1};
-  spheres.push_back(sphere2);
-
-  Camera cam = {
+  Camera cam(
     vec::make(0, 0, 0), // pos
     vec::make(0, 0, -1) // dir
-  };
+  );
 
   int w = 500;
   int h = 500;
   int buffer[w * h];
+
+  // render to buffer
   render(buffer, w, h, cam, spheres);
 
-  ofstream renderFile;
   string timestamp = to_string(time(0));
   string filename = "./renders/" + timestamp + ".pbm";
+
+  ofstream renderFile;
   renderFile.open(filename);
   renderFile << "P1" << endl;
   renderFile << "# rendered at " << timestamp << endl;
