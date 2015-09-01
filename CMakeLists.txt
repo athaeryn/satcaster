@@ -10,5 +10,6 @@ add_definitions(
 
 add_executable(
   satcaster main.cpp
+            Vec3.cpp
 )
 
