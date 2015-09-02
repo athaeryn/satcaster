@@ -3,9 +3,12 @@
 #include <iostream>
 #include <vector>
 
+#include "EasyBMP.h"
+
 #include "Camera.h"
 #include "Sphere.h"
 #include "Vec3.h"
+
 
 using namespace std;
 using namespace vec;
