@@ -3,6 +3,8 @@
 #include <iostream>
 #include <vector>
 
+#include "EasyBMP.h"
+
 #include "Camera.h"
 #include "Sphere.h"
 #include "Vec3.h"
@@ -40,22 +42,24 @@ void render(int buffer[], int w, int h, Camera camera, vector<Sphere> spheres) {
   }
 }
 
-void write_pbm(int buffer[], int w, int h) {
-  string timestamp = to_string(time(0));
-  string filename = "./renders/" + timestamp + ".pbm";
-  ofstream renderFile;
-  renderFile.open(filename);
-  renderFile << "P1" << endl;
-  renderFile << "# rendered at " << timestamp << endl;
-  renderFile << w << " " << h << endl;
+void write_bitmap(int buffer[], int w, int h) {
+  BMP out;
+  out.SetSize(w, h);
+  out.SetBitDepth(1);
+
   for (int y = 0; y < h; y++) {
     for (int x = 0; x < w; x++) {
-      // 0 is 1 and 1 is 0, because pbm
-      renderFile << " " << (buffer[y * w + x] > 0 ? 0 : 1);
+      int value = buffer[y * w + x] > 0 ? 255 : 0;
+      RGBApixel p;
+      p.Red = value;
+      p.Blue = value;
+      p.Green = value;
+      out.SetPixel(x, y, p);
     }
-    renderFile << endl;
   }
-  renderFile.close();
+  string timestamp = to_string(time(0));
+  string filename = "./renders/" + timestamp + ".bmp";
+  out.WriteToFile(filename.c_str());
 }
 
 int main() {
@@ -66,7 +70,7 @@ int main() {
   Camera cam(
     vec::make(0, 0, 0), // pos
     vec::make(0, 0, -1), // dir
-    60 // fov
+    90 // fov
   );
 
   int w = 500;
@@ -76,7 +80,7 @@ int main() {
   // render to buffer
   render(buffer, w, h, cam, spheres);
 
-  write_pbm(buffer, w, h);
+  write_bitmap(buffer, w, h);
 
   return 0;
 }
