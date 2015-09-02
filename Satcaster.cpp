@@ -1,10 +1,9 @@
-#include <cmath>
 #include "Satcaster.h"
 
 
-Satcaster::Satcaster() {
-  spheres.push_back(Sphere(vec::make(0, 0, -15), 4));
-  spheres.push_back(Sphere(vec::make(8, 4, -20), 1));
+void Satcaster::add_body(float x, float y, float z, float r) {
+  Sphere s(vec::make(x, y, z), r);
+  spheres.push_back(s);
 }
 
 

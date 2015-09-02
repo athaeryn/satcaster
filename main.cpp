@@ -33,7 +33,9 @@ int main() {
   int buffer[w * h];
 
   Satcaster satcaster;
-  satcaster.camera.fov = 60;
+  // satcaster.camera.fov = 60;
+  satcaster.add_body(0, 0, -20, 4);
+  satcaster.add_body(2, 8, -21, 1);
   satcaster.render(buffer, w, h);
 
   write_bitmap(buffer, w, h);
