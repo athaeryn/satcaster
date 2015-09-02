@@ -22,10 +22,11 @@ bool does_intersect(Vec3 start, Vec3 dir, Sphere sphere) {
 
 void render(int buffer[], int w, int h, Camera camera, vector<Sphere> spheres) {
   float aspect = w / h;
+  float fov = tan(camera.fov / 2 * M_PI / 180);
   for (int y = 0; y < h; y++) {
     for (int x = 0; x < w; x++) {
-      float nx = ((2 * (x + .5) / w) - 1) * aspect;
-      float ny = 1 - (2 * (y + .5) / h);
+      float nx = ((2 * (x + .5) / w) - 1) * aspect * fov;
+      float ny = 1 - (2 * (y + .5) / h) * fov;
       Vec3 ray = norm(add(add(vec::make(nx, ny, 0), camera.pos), camera.dir));
 
       bool intersects = false;
@@ -39,26 +40,9 @@ void render(int buffer[], int w, int h, Camera camera, vector<Sphere> spheres) {
   }
 }
 
-int main() {
-  vector<Sphere> spheres;
-  spheres.push_back(Sphere(vec::make(0, 0, -10), 4));
-  spheres.push_back(Sphere(vec::make(8, 4, -13), 1));
-
-  Camera cam(
-    vec::make(0, 0, 0), // pos
-    vec::make(0, 0, -1) // dir
-  );
-
-  int w = 500;
-  int h = 500;
-  int buffer[w * h];
-
-  // render to buffer
-  render(buffer, w, h, cam, spheres);
-
+void write_pbm(int buffer[], int w, int h) {
   string timestamp = to_string(time(0));
   string filename = "./renders/" + timestamp + ".pbm";
-
   ofstream renderFile;
   renderFile.open(filename);
   renderFile << "P1" << endl;
@@ -72,6 +56,27 @@ int main() {
     renderFile << endl;
   }
   renderFile.close();
+}
+
+int main() {
+  vector<Sphere> spheres;
+  spheres.push_back(Sphere(vec::make(0, 0, -15), 4));
+  spheres.push_back(Sphere(vec::make(8, 4, -20), 1));
+
+  Camera cam(
+    vec::make(0, 0, 0), // pos
+    vec::make(0, 0, -1), // dir
+    60 // fov
+  );
+
+  int w = 500;
+  int h = 500;
+  int buffer[w * h];
+
+  // render to buffer
+  render(buffer, w, h, cam, spheres);
+
+  write_pbm(buffer, w, h);
 
   return 0;
 }
