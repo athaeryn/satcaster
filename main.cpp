@@ -71,7 +71,7 @@ Config read_config(const string filename) {
       pos.x = stof(capture[1].str());
       pos.y = stof(capture[2].str());
       pos.z = stof(capture[3].str());
-      int r = stof(capture[4].str());
+      float r = stof(capture[4].str());
       // TODO: string seed = capture[5].str();
       Sphere s(pos, r);
       conf.spheres.push_back(s);
