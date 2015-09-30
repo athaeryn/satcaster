@@ -75,6 +75,8 @@ Config read_config(const string filename) {
       // TODO: string seed = capture[5].str();
       Sphere s(pos, r);
       conf.spheres.push_back(s);
+    } else {
+      cerr << "Couldn't parse line: " << line << endl;
     }
   }
   return conf;
