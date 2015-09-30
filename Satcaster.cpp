@@ -1,8 +1,8 @@
 #include "Satcaster.h"
 
 
-void Satcaster::add_body(float x, float y, float z, float r) {
-  Sphere s(vec::make(x, y, z), r);
+void Satcaster::add_body(float x, float y, float z, float r, string seed) {
+  Sphere s(vec::make(x, y, z), r, seed);
   spheres.push_back(s);
 }
 

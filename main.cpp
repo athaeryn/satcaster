@@ -72,8 +72,8 @@ Config read_config(const string filename) {
       pos.y = stof(capture[2].str());
       pos.z = stof(capture[3].str());
       float r = stof(capture[4].str());
-      // TODO: string seed = capture[5].str();
-      Sphere s(pos, r);
+      string seed = capture[5].str();
+      Sphere s(pos, r, seed);
       conf.spheres.push_back(s);
     } else {
       cerr << "Couldn't parse line: " << line << endl;
@@ -101,7 +101,7 @@ int main(int argc, char **argv) {
   Satcaster satcaster;
   satcaster.camera = config.camera;
   for (Sphere s: config.spheres) {
-    satcaster.add_body(s.pos.x, s.pos.y, s.pos.z, s.r);
+    satcaster.add_body(s.pos.x, s.pos.y, s.pos.z, s.r, s.seed);
   }
   satcaster.render(buffer, w, h);
   write_bitmap(renderFilename, buffer, w, h);
