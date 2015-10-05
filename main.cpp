@@ -37,6 +37,11 @@ void write_bitmap(string filename, int buffer[], int w, int h) {
   out.WriteToFile(filename.c_str());
 }
 
+string write_pbm(int buffer[], int w, int h) {
+  string pbm("");
+  pbm += "P1" + endl;
+  return pbm;
+}
 
 Config read_config(const string filename) {
   ifstream configFile(filename);
@@ -84,13 +89,12 @@ Config read_config(const string filename) {
 
 
 int main(int argc, char **argv) {
-  if (argc != 3) {
-    cout << "Usage: " << argv[0] << " <scene_file> <output_path>" << endl;
+  if (argc != 2) {
+    cout << "Usage: " << argv[0] << " <scene_file>" << endl;
     return 1;
   }
 
   const char *configFilename = argv[1];
-  string renderFilename(argv[2]);
 
   Config config = read_config(configFilename);
 
@@ -104,7 +108,7 @@ int main(int argc, char **argv) {
     satcaster.add_body(s.pos.x, s.pos.y, s.pos.z, s.r, s.seed);
   }
   satcaster.render(buffer, w, h);
-  write_bitmap(renderFilename, buffer, w, h);
+  write_pbm(buffer, w, h);
 
   return 0;
 }
