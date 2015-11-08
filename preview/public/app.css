@@ -1,0 +1,22 @@
+html, body {
+  margin: 0;
+  height: 100%;
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: #222;
+}
+
+body.error {
+  background-image: linear-gradient(black, tomato);
+}
+
+canvas {
+  min-width: 20vw;
+  height: auto;
+  image-rendering: pixelated;
+  background-color: white;
+}

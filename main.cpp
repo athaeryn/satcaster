@@ -1,10 +1,10 @@
 #include <cmath>
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <map>
 #include <regex>
 
-#include "EasyBMP.h"
 #include "Vec3.h"
 #include "Satcaster.h"
 
@@ -18,25 +18,19 @@ struct Config {
   int width;
 };
 
-
-void write_bitmap(string filename, int buffer[], int w, int h) {
-  BMP out;
-  out.SetSize(w, h);
-  out.SetBitDepth(1);
-
+string write_pbm(int buffer[], int w, int h) {
+  ostringstream pbm;
+  pbm << "P1" << endl;
+  pbm << "#" << endl;
+  pbm << w << " " << h << endl;
   for (int y = 0; y < h; y++) {
     for (int x = 0; x < w; x++) {
-      int value = buffer[y * w + x] > 0 ? 255 : 0;
-      RGBApixel p;
-      p.Red = value;
-      p.Blue = value;
-      p.Green = value;
-      out.SetPixel(x, y, p);
+      pbm << " " << (buffer[y * w + x] > 0 ? 0 : 1); // Black is 1 in PBM...
     }
+    pbm << endl;
   }
-  out.WriteToFile(filename.c_str());
+  return pbm.str();
 }
-
 
 Config read_config(const string filename) {
   ifstream configFile(filename);
@@ -84,13 +78,12 @@ Config read_config(const string filename) {
 
 
 int main(int argc, char **argv) {
-  if (argc != 3) {
-    cout << "Usage: " << argv[0] << " <scene_file> <output_path>" << endl;
+  if (argc != 2) {
+    cout << "Usage: " << argv[0] << " <scene_file>" << endl;
     return 1;
   }
 
   const char *configFilename = argv[1];
-  string renderFilename(argv[2]);
 
   Config config = read_config(configFilename);
 
@@ -104,7 +97,7 @@ int main(int argc, char **argv) {
     satcaster.add_body(s.pos.x, s.pos.y, s.pos.z, s.r, s.seed);
   }
   satcaster.render(buffer, w, h);
-  write_bitmap(renderFilename, buffer, w, h);
+  cout << write_pbm(buffer, w, h);
 
   return 0;
 }
