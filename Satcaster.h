@@ -12,6 +12,12 @@ using namespace std;
 using namespace vec;
 
 
+struct Intersection {
+  Vec3 pos;
+  Vec3 normal;
+};
+
+
 class Satcaster {
 public:
   Camera camera;
@@ -19,7 +25,7 @@ public:
   void render(int buffer[], int w, int h);
 private:
   vector<Sphere> spheres;
-  bool does_intersect(Vec3 start, Vec3 dir, Sphere sphere);
+  Intersection* get_intersection(Vec3 start, Vec3 dir, Sphere sphere);
 };
 
 

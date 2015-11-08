@@ -13,3 +13,10 @@ html, body {
 body.error {
   background-image: linear-gradient(black, tomato);
 }
+
+canvas {
+  min-width: 20vw;
+  height: auto;
+  image-rendering: pixelated;
+  background-color: white;
+}

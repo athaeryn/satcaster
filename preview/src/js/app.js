@@ -1,17 +1,23 @@
 require('babelify/polyfill');
 import io from 'socket.io-client'
+import pbm2canvas from 'pbm2canvas'
 
 const socket = io()
+
+const container = document.getElementById('render')
 
 socket.on('make', function () {
   console.log('make')
 })
 
-let img = document.getElementById('render')
-console.log(img)
-
-socket.on('render', function (timestamp) {
-  img.src = `/renders/${timestamp}.bmp`
+socket.on('render', function (pbm) {
+  let newCanvas = pbm2canvas(pbm)
+  let oldCanvas = container.querySelector('canvas')
+  if (oldCanvas) {
+    container.replaceChild(newCanvas, oldCanvas)
+  } else {
+    container.appendChild(newCanvas)
+  }
   errorOff()
 })
 

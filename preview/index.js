@@ -1,5 +1,6 @@
 var browserify = require('browserify-middleware')
 var exec = require('child_process').exec
+var spawn = require('child_process').spawn
 var express = require('express')
 var http = require('http')
 
@@ -25,17 +26,12 @@ server.listen(process.env.NODE_ENV || 7000, function () {
   watcher.on('all', make)
 })
 
-var lastTimestamp = null;
-
 
 //
 //Socket stuff
 //
 io.on('connection', function (socket) {
   console.log('browser connection')
-  if (lastTimestamp) {
-    io.emit('render', lastTimestamp);
-  }
   socket.on('disconnect', function () {
     console.log('browser disconnect')
   })
@@ -67,15 +63,16 @@ function render () {
   console.time(timingLabel)
   var time = +new Date()
   var renderPath = 'preview/public/renders/' + time + '.bmp'
-  exec('bin/satcaster scenes/simple.txt ' + renderPath, function (error, stdout, stderr) {
+  var render = spawn('bin/satcaster', ['scenes/simple.txt'])
+  var pbm = ''
+  render.stdout.on('data', function (data) {
+    pbm += data
+  })
+  render.stderr.on('data', function (data) {
+    console.log('err', data)
+  })
+  render.on('close', function () {
     console.timeEnd(timingLabel)
-    if (error != null) {
-      io.emit('error')
-      console.log(stdout)
-      return
-    }
-
-    lastTimestamp = time
-    io.emit('render', time)
+    io.emit('render', pbm)
   })
 }

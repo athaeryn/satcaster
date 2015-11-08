@@ -18,7 +18,8 @@ void Satcaster::render(int buffer[], int w, int h) {
 
       bool intersects = false;
       for (Sphere s : spheres) {
-        if (does_intersect(camera.pos, ray, s)) {
+        Intersection* intersection = get_intersection(camera.pos, ray, s);
+        if (intersection) {
           intersects = true;
         }
       }
@@ -28,11 +29,17 @@ void Satcaster::render(int buffer[], int w, int h) {
 }
 
 
-bool Satcaster::does_intersect(Vec3 start, Vec3 dir, Sphere sphere) {
+Intersection* Satcaster::get_intersection(Vec3 start, Vec3 dir, Sphere sphere) {
   Vec3 displacement = sub(sphere.pos, start);
   float a = mag_sq(dir);
   float b = 2 * dot(dir, displacement);
   float c = mag_sq(displacement) - pow(sphere.r, 2);
   float radicand = b * b - 4 * a * c;
-  return radicand >= 0;
+
+  if (radicand >= 0) {
+    Intersection i;
+    return &i;
+  } else {
+    return nullptr;
+  }
 }
