@@ -7,7 +7,7 @@ html, body {
   justify-content: center;
   align-items: center;
 
-  background-color: #222;
+  background-color: #2f2f2f;
 }
 
 body.error {
@@ -15,8 +15,6 @@ body.error {
 }
 
 canvas {
-  min-width: 20vw;
-  height: auto;
   image-rendering: pixelated;
   background-color: white;
 }

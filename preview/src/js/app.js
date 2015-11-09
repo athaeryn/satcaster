@@ -6,11 +6,14 @@ const socket = io()
 
 const container = document.getElementById('render')
 
-socket.on('make', function () {
-  console.log('make')
+socket.on('make', errorOff)
+socket.on('error', errorOn)
+socket.on('render', function (pbm) {
+  render(pbm)
+  errorOff()
 })
 
-socket.on('render', function (pbm) {
+function render (pbm) {
   let newCanvas = pbm2canvas(pbm)
   let oldCanvas = container.querySelector('canvas')
   if (oldCanvas) {
@@ -18,13 +21,10 @@ socket.on('render', function (pbm) {
   } else {
     container.appendChild(newCanvas)
   }
-  errorOff()
-})
+}
 
-socket.on('error', errorOn)
-
-
-function errorOn () {
+function errorOn (error) {
+  console.log(error)
   document.body.classList.add('error')
 }
 

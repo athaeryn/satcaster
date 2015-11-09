@@ -14,9 +14,11 @@ app.use('/app.js', browserify(__dirname + '/src/js/app.js'))
 app.get('/', (_, res) => res.sendFile(__dirname + '/public/index.html'))
 
 var chokidar = require('chokidar')
-var watcher = chokidar.watch('*.cpp')
+var watcher = chokidar.watch('*.cpp', { ignoreInitial: true })
 watcher.add('*.h')
 watcher.add('scenes/simple.txt')
+
+var mostRecentRender
 
 server.listen(process.env.NODE_ENV || 7000, function () {
   var host = server.address().address
@@ -24,6 +26,7 @@ server.listen(process.env.NODE_ENV || 7000, function () {
   console.log('Satcaster preview server listening at http://%s:%s', host, port)
 
   watcher.on('all', make)
+  make()
 })
 
 
@@ -32,6 +35,9 @@ server.listen(process.env.NODE_ENV || 7000, function () {
 //
 io.on('connection', function (socket) {
   console.log('browser connection')
+  if (mostRecentRender) {
+    socket.emit('render', mostRecentRender)
+  }
   socket.on('disconnect', function () {
     console.log('browser disconnect')
   })
@@ -42,6 +48,7 @@ io.on('connection', function (socket) {
 // Build process stuff
 //
 function make () {
+  io.emit('make')
   var timingLabel = 'cmake'
   console.time(timingLabel)
   exec('make -C build', function (error, stdout, stderr) {
@@ -50,7 +57,7 @@ function make () {
       console.log('exec error: %s', error)
       console.log(stdout)
       console.log(stderr)
-      io.emit('error')
+      io.emit('error', stderr)
       return
     }
 
@@ -74,5 +81,6 @@ function render () {
   render.on('close', function () {
     console.timeEnd(timingLabel)
     io.emit('render', pbm)
+    mostRecentRender = pbm
   })
 }
