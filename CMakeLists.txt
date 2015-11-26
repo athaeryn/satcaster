@@ -16,6 +16,4 @@ add_executable(
   satcaster main.cpp
             Vec3.cpp
             Satcaster.cpp
-            ${SRC_DIR}/EasyBMP/EasyBMP.cpp
 )
-

@@ -1,0 +1,11 @@
+#!/bin/sh
+
+input=$(cat)
+tmpfile=$(mktemp renders/tmp.XXXXXX)
+renderfile="renders/$(date +%s).bmp"
+
+echo "$input" > "$tmpfile"
+convert "$tmpfile" -colors 2 "$renderfile"
+
+rm "$tmpfile"
+echo "$renderfile"

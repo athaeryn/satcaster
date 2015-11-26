@@ -2,7 +2,6 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include <map>
 #include <regex>
 
 #include "Vec3.h"
