@@ -17,19 +17,23 @@ struct Config {
   int width;
 };
 
+
 string write_pbm(int buffer[], int w, int h) {
   ostringstream pbm;
-  pbm << "P1" << endl;
+  pbm << "P2" << endl;
   pbm << "#" << endl;
   pbm << w << " " << h << endl;
+  pbm << "1" << endl;
   for (int y = 0; y < h; y++) {
     for (int x = 0; x < w; x++) {
-      pbm << " " << (buffer[y * w + x] > 0 ? 0 : 1); // Black is 1 in PBM...
+      pbm << " " << buffer[y * w + x];
     }
     pbm << endl;
   }
+
   return pbm.str();
 }
+
 
 Config read_config(const string filename) {
   ifstream configFile(filename);
@@ -72,6 +76,7 @@ Config read_config(const string filename) {
       cerr << "Couldn't parse line: " << line << endl;
     }
   }
+
   return conf;
 }
 
@@ -100,4 +105,3 @@ int main(int argc, char **argv) {
 
   return 0;
 }
-

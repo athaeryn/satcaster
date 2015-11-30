@@ -46,3 +46,6 @@ Vec3 vec::norm(Vec3 v) {
   return normed;
 }
 
+std::string vec::to_string(Vec3 v) {
+  return "<Vec3 x=" + std::to_string(v.x) + " y=" + std::to_string(v.y) + " z=" + std::to_string(v.z) + ">";
+}

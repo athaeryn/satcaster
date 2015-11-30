@@ -1,6 +1,8 @@
 #ifndef VEC3_H
 #define VEC3_H
 
+#include <string>
+
 struct Vec3 {
   float x;
   float y;
@@ -15,6 +17,8 @@ namespace vec {
   float mag_sq(Vec3 v);
   float mag(Vec3 v);
   float dot(Vec3 a, Vec3 b);
+
+  std::string to_string(Vec3 v);
 }
 
 #endif

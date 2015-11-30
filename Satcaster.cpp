@@ -26,6 +26,8 @@ void Satcaster::render(int buffer[], int w, int h) {
       buffer[y * w + x] = intersects ? 1 : 0;
     }
   }
+
+  // DITHER!
 }
 
 
