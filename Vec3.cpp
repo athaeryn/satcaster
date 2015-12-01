@@ -25,6 +25,15 @@ Vec3 vec::sub(Vec3 a, Vec3 b) {
   return c;
 }
 
+Vec3 vec::mult(Vec3 v, float scalar) {
+  Vec3 v2 = vec::make(
+    v.x * scalar,
+    v.y * scalar,
+    v.z * scalar
+  );
+  return v2;
+}
+
 float vec::mag_sq(Vec3 v) {
   return pow(v.x, 2) + pow(v.y, 2) + pow(v.z, 2);
 }

@@ -25,7 +25,7 @@ public:
   void render(int buffer[], int w, int h);
 private:
   vector<Sphere> spheres;
-  Intersection* get_intersection(Vec3 start, Vec3 dir, Sphere sphere);
+  bool get_intersection(Intersection &intersection, Vec3 start, Vec3 dir, Sphere sphere);
 };
 
 

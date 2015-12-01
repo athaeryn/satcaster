@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Satcaster.h"
 
 
@@ -16,32 +17,51 @@ void Satcaster::render(int buffer[], int w, int h) {
       float ny = 1 - (2 * (y + .5) / h) * fov;
       Vec3 ray = norm(add(add(vec::make(nx, ny, 0), camera.pos), camera.dir));
 
-      bool intersects = false;
+      vector<Intersection> intersections;
       for (Sphere s : spheres) {
-        Intersection* intersection = get_intersection(camera.pos, ray, s);
-        if (intersection) {
-          intersects = true;
+        Intersection intersection;
+        if (get_intersection(intersection, camera.pos, ray, s)) {
+          intersections.push_back(intersection);
         }
       }
-      buffer[y * w + x] = intersects ? 1 : 0;
+      if (intersections.size() > 0) {
+        Intersection i = intersections.at(0);
+        float shade = vec::dot(ray, i.normal);
+        buffer[y * w + x] = 255 * shade * -1;
+      } else {
+        buffer[y * w + x] = 0;
+      }
     }
   }
 
-  // DITHER!
+  // DITHER! ...or maybe later.
 }
 
 
-Intersection* Satcaster::get_intersection(Vec3 start, Vec3 dir, Sphere sphere) {
-  Vec3 displacement = sub(sphere.pos, start);
-  float a = mag_sq(dir);
-  float b = 2 * dot(dir, displacement);
-  float c = mag_sq(displacement) - pow(sphere.r, 2);
-  float radicand = b * b - 4 * a * c;
+bool Satcaster::get_intersection(Intersection &intersection, Vec3 start, Vec3 dir, Sphere sphere) {
+  // TODO: better names and explanation of this.
+  // I'm using the geometric solution described here:
+  // http://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-sphere-intersection
 
-  if (radicand >= 0) {
-    Intersection i;
-    return &i;
-  } else {
-    return nullptr;
+  Vec3 L = sub(sphere.pos, start);
+  float tca = dot(L, dir);
+  if (tca < 0) return false;
+  float d2 = dot(L, L) - tca * tca;
+  if (d2 > sphere.r) return false;
+  float thc = sqrt(sphere.r - d2);
+  float t0 = tca - thc;
+  float t1 = tca + thc;
+
+  if (t0 > t1) {
+    swap(t0, t1);
   }
+
+  if (t0 < 0) return false;
+
+  Vec3 hit = add(start, mult(dir, t0));
+  Vec3 normal = norm(sub(hit, sphere.pos));
+
+  intersection.pos = hit;
+  intersection.normal = normal;
+  return true;
 }

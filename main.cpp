@@ -23,7 +23,7 @@ string write_pbm(int buffer[], int w, int h) {
   pbm << "P2" << endl;
   pbm << "#" << endl;
   pbm << w << " " << h << endl;
-  pbm << "1" << endl;
+  pbm << "255" << endl;
   for (int y = 0; y < h; y++) {
     for (int x = 0; x < w; x++) {
       pbm << " " << buffer[y * w + x];

@@ -76,7 +76,7 @@ function render () {
     pbm += data
   })
   render.stderr.on('data', function (data) {
-    console.log('err', data)
+    console.log(data.toString())
   })
   render.on('close', function () {
     console.timeEnd(timingLabel)
