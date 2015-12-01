@@ -76,6 +76,7 @@ function render () {
     pbm += data
   })
   render.stderr.on('data', function (data) {
+    // TODO: fix messages breaking into multiple lines
     console.log(data.toString())
   })
   render.on('close', function () {

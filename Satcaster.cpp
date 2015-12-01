@@ -9,6 +9,7 @@ void Satcaster::add_body(float x, float y, float z, float r, string seed) {
 
 
 void Satcaster::render(int buffer[], int w, int h) {
+  int rawBuffer[w * h];
   float aspect = w / h;
   float fov = tan(camera.fov / 2 * M_PI / 180);
   for (int y = 0; y < h; y++) {
@@ -18,28 +19,42 @@ void Satcaster::render(int buffer[], int w, int h) {
       Vec3 ray = norm(add(add(vec::make(nx, ny, 0), camera.pos), camera.dir));
 
       vector<Intersection> intersections;
-      for (Sphere s : spheres) {
+      for (Sphere sphere : spheres) {
         Intersection intersection;
-        if (get_intersection(intersection, camera.pos, ray, s)) {
+        if (get_intersection(intersection, camera.pos, ray, sphere)) {
           intersections.push_back(intersection);
         }
       }
       if (intersections.size() > 0) {
-        Intersection i = intersections.at(0);
+        Intersection i = intersections[0];
         float shade = vec::dot(ray, i.normal);
         float value = 255 * shade * -1;
-        if (value > (rand() % 100 + 150)) {
-          buffer[y * w + x] = 255;
-        } else {
-          buffer[y * w + x] = 0;
-        }
+        rawBuffer[y * w + x] = value;
       } else {
-        buffer[y * w + x] = 0;
+        rawBuffer[y * w + x] = 0;
       }
     }
   }
 
-  // DITHER! ...or maybe later.
+  int error = 0;
+  for (int y = 0; y < h; y++) {
+    for (int x = 0; x < w; x++) {
+      int index = y * w + x;
+      /* buffer[index] = rawBuffer[index]; continue; */
+      int raw = rawBuffer[index];
+      raw += error;
+      error = 0;
+      int diffFromHigh = raw - 255;
+      int diffFromLow = raw;
+      if (abs(diffFromHigh) < abs(diffFromLow)) {
+        error = diffFromHigh;
+        buffer[index] = 255;
+      } else {
+        error = diffFromLow;
+        buffer[index] = 0;
+      }
+    }
+  }
 }
 
 
