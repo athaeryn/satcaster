@@ -27,7 +27,12 @@ void Satcaster::render(int buffer[], int w, int h) {
       if (intersections.size() > 0) {
         Intersection i = intersections.at(0);
         float shade = vec::dot(ray, i.normal);
-        buffer[y * w + x] = 255 * shade * -1;
+        float value = 255 * shade * -1;
+        if (value > (rand() % 100 + 150)) {
+          buffer[y * w + x] = 255;
+        } else {
+          buffer[y * w + x] = 0;
+        }
       } else {
         buffer[y * w + x] = 0;
       }
