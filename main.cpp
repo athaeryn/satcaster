@@ -12,6 +12,7 @@ using namespace std;
 
 struct Config {
   Camera camera;
+  Vec3 light;
   vector<Sphere> spheres;
   int height;
   int width;
@@ -43,6 +44,7 @@ Config read_config(const string filename) {
   string num = "([-.[:digit:]]+)";
   string triple = "\\(" + num + ", " + num + ", " + num + "\\)";
   regex camera("^" + triple + " " + triple + " " + num + "$");
+  regex light("^" + triple + "$");
   regex planet("^" + triple + " " + num + " (.*)$");
 
   Config conf;
@@ -63,6 +65,10 @@ Config read_config(const string filename) {
       conf.camera.dir.y = stof(capture[5].str());
       conf.camera.dir.z = stof(capture[6].str());
       conf.camera.fov = stof(capture[7].str());
+    } else if (regex_match(line, capture, light)) {
+      conf.light.x = stof(capture[1].str());
+      conf.light.y = stof(capture[2].str());
+      conf.light.z = stof(capture[3].str());
     } else if (regex_match(line, capture, planet)) {
       Vec3 pos;
       pos.x = stof(capture[1].str());
@@ -96,6 +102,7 @@ int main(int argc, char **argv) {
   int buffer[w * h];
 
   Satcaster satcaster;
+  satcaster.light = config.light;
   satcaster.camera = config.camera;
   for (Sphere s: config.spheres) {
     satcaster.add_body(s.pos.x, s.pos.y, s.pos.z, s.r, s.seed);

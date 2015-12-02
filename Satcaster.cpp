@@ -36,6 +36,10 @@ void Satcaster::render(int buffer[], int w, int h) {
     }
   }
 
+
+  // TODO: move dithering to its own function(s)
+  // eventually the dithering algorithm could be chosen with a command line flag
+
   int errorBuffer[(w + 1) * (h + 1)];
   for (int i = 0; i < w * h; i++) {
     errorBuffer[i] = 0;

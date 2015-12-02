@@ -21,6 +21,7 @@ struct Intersection {
 class Satcaster {
 public:
   Camera camera;
+  Vec3 light;
   void add_body(float x, float y, float z, float r, string seed);
   void render(int buffer[], int w, int h);
 private:

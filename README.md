@@ -21,6 +21,8 @@ Scenes are specified in a text file with the following format:
 width height
 (cameraPosition) (cameraDirection) fov
 
+(lightPosition)
+
 (sphereCenter) sphereRadius randomSeed
 ...
 ```
