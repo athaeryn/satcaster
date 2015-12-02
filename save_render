@@ -1,0 +1,3 @@
+#!/bin/sh
+
+./bin/satcaster ./scenes/simple.txt | ./pbm2bmp
