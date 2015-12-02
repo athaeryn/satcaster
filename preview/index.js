@@ -65,6 +65,7 @@ function make () {
   })
 }
 
+var stderrBuffer = ''
 function render () {
   var timingLabel = 'render'
   console.time(timingLabel)
@@ -77,7 +78,10 @@ function render () {
   })
   render.stderr.on('data', function (data) {
     // TODO: fix messages breaking into multiple lines
-    console.log(data.toString())
+    var data = stderrBuffer + data.toString()
+    var lines = data.split("\n")
+    console.log(lines.slice(0, -1).join("\n"))
+    stderrBuffer = lines.slice(-1)
   })
   render.on('close', function () {
     console.timeEnd(timingLabel)
