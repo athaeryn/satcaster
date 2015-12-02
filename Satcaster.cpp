@@ -77,22 +77,28 @@ void Satcaster::render(int buffer[], int w, int h) {
         error = diffFromLow;
         buffer[index] = 0;
       }
-#if 1
+#if 0
       // Floyd-Steinberg
       float sixteenth = error / 16.0f;
       errorBuffer[index + 1] += (int) sixteenth * 7.0f;
       errorBuffer[index + w] += (int) sixteenth * 5.0f;
       errorBuffer[index + w - 1] += (int) sixteenth * 3.0f;
       errorBuffer[index + w + 1] += (int) sixteenth;
+#elif 1
+      // "False Floyd-Steinberg"
+      float eighth = (int) error / 8.0f;
+      errorBuffer[index + 1] += (int) eighth * 3;
+      errorBuffer[index + w] += (int) eighth * 3;
+      errorBuffer[index + w + 1] += (int) eighth * 2;
 #else
       // Atkinson
-      int eigth = (int) error / 8.0f;
-      errorBuffer[index + 1] += eigth;
-      errorBuffer[index + 2] += eigth;
-      errorBuffer[index + w] += eigth;
-      errorBuffer[index + w + 2] += eigth;
-      errorBuffer[index + w - 2] += eigth;
-      errorBuffer[index + w * 2] += eigth;
+      int eighth = (int) error / 8.0f;
+      errorBuffer[index + 1] += eighth;
+      errorBuffer[index + 2] += eighth;
+      errorBuffer[index + w] += eighth;
+      errorBuffer[index + w + 2] += eighth;
+      errorBuffer[index + w - 2] += eighth;
+      errorBuffer[index + w * 2] += eighth;
 #endif
     }
   }
