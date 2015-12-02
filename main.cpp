@@ -4,11 +4,11 @@
 #include <sstream>
 #include <regex>
 
+#include "Buffer.h"
 #include "Vec3.h"
 #include "Satcaster.h"
 
 using namespace std;
-
 
 struct Config {
   Camera camera;
@@ -19,7 +19,9 @@ struct Config {
 };
 
 
-string write_pbm(int buffer[], int w, int h) {
+string write_pbm(const Buffer &buffer) {
+  int w = buffer.w;
+  int h = buffer.h;
   ostringstream pbm;
   pbm << "P2" << endl;
   pbm << "#" << endl;
@@ -27,7 +29,7 @@ string write_pbm(int buffer[], int w, int h) {
   pbm << "255" << endl;
   for (int y = 0; y < h; y++) {
     for (int x = 0; x < w; x++) {
-      pbm << " " << buffer[y * w + x];
+      pbm << " " << buffer.data[y * w + x];
     }
     pbm << endl;
   }
@@ -94,12 +96,7 @@ int main(int argc, char **argv) {
   }
 
   const char *configFilename = argv[1];
-
   Config config = read_config(configFilename);
-
-  int w = config.width;
-  int h = config.height;
-  int buffer[w * h];
 
   Satcaster satcaster;
   satcaster.light = config.light;
@@ -107,8 +104,11 @@ int main(int argc, char **argv) {
   for (Sphere s: config.spheres) {
     satcaster.add_body(s.pos.x, s.pos.y, s.pos.z, s.r, s.seed);
   }
-  satcaster.render(buffer, w, h);
-  cout << write_pbm(buffer, w, h);
+
+  Buffer buffer(config.width, config.height);
+
+  satcaster.render(buffer);
+  cout << write_pbm(buffer);
 
   return 0;
 }

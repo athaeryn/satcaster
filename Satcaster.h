@@ -4,6 +4,7 @@
 #include <cmath>
 #include <string>
 #include <vector>
+#include "Buffer.h"
 #include "Camera.h"
 #include "Sphere.h"
 #include "Vec3.h"
@@ -23,17 +24,17 @@ struct Ray {
   Vec3 dir;
 };
 
-
 class Satcaster {
 public:
   Camera camera;
   Vec3 light;
   void add_body(float x, float y, float z, float r, string seed);
-  void render(int buffer[], int w, int h);
+  void render(Buffer &buffer);
 private:
   vector<Sphere> spheres;
   bool get_intersection(Intersection &intersection, const Ray ray, const Sphere sphere);
   float get_intersection_distance(const Ray &ray, const Sphere &sphere);
+  /* void dither(int buffer[], Ditherer ditherer); */
 };
 
 

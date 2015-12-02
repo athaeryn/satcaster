@@ -9,7 +9,9 @@ void Satcaster::add_body(float x, float y, float z, float r, string seed) {
 }
 
 
-void Satcaster::render(int buffer[], int w, int h) {
+void Satcaster::render(Buffer &buffer) {
+  int w = buffer.w;
+  int h = buffer.h;
   int rawBuffer[w * h];
   float aspect = w / h;
   float fov = tan(camera.fov / 2 * M_PI / 180);
@@ -72,19 +74,19 @@ void Satcaster::render(int buffer[], int w, int h) {
       int error;
       if (abs(diffFromHigh) < abs(diffFromLow)) {
         error = diffFromHigh;
-        buffer[index] = 255;
+        buffer.data[index] = 255;
       } else {
         error = diffFromLow;
-        buffer[index] = 0;
+        buffer.data[index] = 0;
       }
-#if 0
+#if 1
       // Floyd-Steinberg
       float sixteenth = error / 16.0f;
       errorBuffer[index + 1] += (int) sixteenth * 7.0f;
       errorBuffer[index + w] += (int) sixteenth * 5.0f;
       errorBuffer[index + w - 1] += (int) sixteenth * 3.0f;
       errorBuffer[index + w + 1] += (int) sixteenth;
-#elif 1
+#elif 0
       // "False Floyd-Steinberg"
       float eighth = (int) error / 8.0f;
       errorBuffer[index + 1] += (int) eighth * 3;
