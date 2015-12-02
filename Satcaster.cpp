@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Satcaster.h"
 
+#define FAR 1000
 
 void Satcaster::add_body(float x, float y, float z, float r, string seed) {
   Sphere s(vec::make(x, y, z), r, seed);
@@ -18,16 +19,18 @@ void Satcaster::render(int buffer[], int w, int h) {
       float ny = 1 - (2 * (y + .5) / h) * fov;
       Vec3 ray = norm(add(add(vec::make(nx, ny, 0), camera.pos), camera.dir));
 
-      vector<Intersection> intersections;
+      Intersection nearestIntersection;
+      nearestIntersection.t = FAR;
       for (Sphere sphere : spheres) {
         Intersection intersection;
         if (get_intersection(intersection, camera.pos, ray, sphere)) {
-          intersections.push_back(intersection);
+          if (intersection.t < nearestIntersection.t) {
+            nearestIntersection = intersection;
+          }
         }
       }
-      if (intersections.size() > 0) {
-        Intersection i = intersections[0];
-        float shade = vec::dot(ray, i.normal);
+      if (nearestIntersection.t < FAR) {
+        float shade = vec::dot(ray, nearestIntersection.normal);
         float value = 255 * shade * -1;
         rawBuffer[y * w + x] = value;
       } else {
@@ -107,5 +110,6 @@ bool Satcaster::get_intersection(Intersection &intersection, Vec3 start, Vec3 di
 
   intersection.pos = hit;
   intersection.normal = normal;
+  intersection.t = t0;
   return true;
 }

@@ -15,6 +15,7 @@ using namespace vec;
 struct Intersection {
   Vec3 pos;
   Vec3 normal;
+  float t;
 };
 
 
