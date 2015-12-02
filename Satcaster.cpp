@@ -36,16 +36,23 @@ void Satcaster::render(int buffer[], int w, int h) {
     }
   }
 
-  int error = 0;
+  int errorBuffer[(w + 1) * (h + 1)];
+  for (int i = 0; i < w * h; i++) {
+    errorBuffer[i] = 0;
+  }
+
   for (int y = 0; y < h; y++) {
     for (int x = 0; x < w; x++) {
       int index = y * w + x;
       /* buffer[index] = rawBuffer[index]; continue; */
-      int raw = rawBuffer[index];
-      raw += error;
-      error = 0;
+      int rightIndex = index + 1;
+      int belowIndex = index + w;
+      int belowLeftIndex = belowIndex - 1;
+      int belowRightIndex = belowIndex + 1;
+      int raw = rawBuffer[index] + errorBuffer[index];
       int diffFromHigh = raw - 255;
       int diffFromLow = raw;
+      int error;
       if (abs(diffFromHigh) < abs(diffFromLow)) {
         error = diffFromHigh;
         buffer[index] = 255;
@@ -53,6 +60,11 @@ void Satcaster::render(int buffer[], int w, int h) {
         error = diffFromLow;
         buffer[index] = 0;
       }
+      float sixteenth = error / 16.0f;
+      errorBuffer[rightIndex]      += (int) (sixteenth * 7.0f);
+      errorBuffer[belowLeftIndex]  += (int) (sixteenth * 3.0f);
+      errorBuffer[belowIndex]      += (int) (sixteenth * 5.0f);
+      errorBuffer[belowRightIndex] += (int) (sixteenth);
     }
   }
 }
