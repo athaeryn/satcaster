@@ -45,10 +45,6 @@ void Satcaster::render(int buffer[], int w, int h) {
     for (int x = 0; x < w; x++) {
       int index = y * w + x;
       /* buffer[index] = rawBuffer[index]; continue; */
-      int rightIndex = index + 1;
-      int belowIndex = index + w;
-      int belowLeftIndex = belowIndex - 1;
-      int belowRightIndex = belowIndex + 1;
       int raw = rawBuffer[index] + errorBuffer[index];
       int diffFromHigh = raw - 255;
       int diffFromLow = raw;
@@ -60,11 +56,23 @@ void Satcaster::render(int buffer[], int w, int h) {
         error = diffFromLow;
         buffer[index] = 0;
       }
+#if 1
+      // Floyd-Steinberg
       float sixteenth = error / 16.0f;
-      errorBuffer[rightIndex]      += (int) (sixteenth * 7.0f);
-      errorBuffer[belowLeftIndex]  += (int) (sixteenth * 3.0f);
-      errorBuffer[belowIndex]      += (int) (sixteenth * 5.0f);
-      errorBuffer[belowRightIndex] += (int) (sixteenth);
+      errorBuffer[index + 1] += (int) sixteenth * 7.0f;
+      errorBuffer[index + w] += (int) sixteenth * 5.0f;
+      errorBuffer[index + w - 1] += (int) sixteenth * 3.0f;
+      errorBuffer[index + w + 1] += (int) sixteenth;
+#else
+      // Atkinson
+      int eigth = (int) error / 8.0f;
+      errorBuffer[index + 1] += eigth;
+      errorBuffer[index + 2] += eigth;
+      errorBuffer[index + w] += eigth;
+      errorBuffer[index + w + 2] += eigth;
+      errorBuffer[index + w - 2] += eigth;
+      errorBuffer[index + w * 2] += eigth;
+#endif
     }
   }
 }
