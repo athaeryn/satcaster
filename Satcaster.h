@@ -18,6 +18,11 @@ struct Intersection {
   float t;
 };
 
+struct Ray {
+  Vec3 origin;
+  Vec3 dir;
+};
+
 
 class Satcaster {
 public:
@@ -27,7 +32,8 @@ public:
   void render(int buffer[], int w, int h);
 private:
   vector<Sphere> spheres;
-  bool get_intersection(Intersection &intersection, Vec3 start, Vec3 dir, Sphere sphere);
+  bool get_intersection(Intersection &intersection, const Ray ray, const Sphere sphere);
+  float get_intersection_distance(const Ray &ray, const Sphere &sphere);
 };
 
 
