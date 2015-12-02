@@ -1,3 +1,0 @@
-#!/bin/sh
-
-bin/satcaster scenes/simple.txt "renders/$(date +%s).bmp"
