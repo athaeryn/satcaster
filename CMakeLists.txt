@@ -6,8 +6,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/bin")
 
 set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
-include_directories(${SRC_DIR}/EasyBMP)
-
 add_definitions(
   -std=c++11
 )
