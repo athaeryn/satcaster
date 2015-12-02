@@ -30,9 +30,9 @@ void Satcaster::render(int buffer[], int w, int h) {
         }
       }
       if (nearestIntersection.t < FAR) {
-        float shade = vec::dot(ray, nearestIntersection.normal);
-        float value = 255 * shade * -1;
-        rawBuffer[y * w + x] = value;
+        Vec3 lightDir = norm(sub(light, nearestIntersection.pos));
+        float angleToLight = dot(lightDir, nearestIntersection.normal);
+        rawBuffer[y * w + x] = 255 * angleToLight;
       } else {
         rawBuffer[y * w + x] = 0;
       }
@@ -71,7 +71,7 @@ void Satcaster::render(int buffer[], int w, int h) {
       errorBuffer[index + w - 1] += (int) sixteenth * 3.0f;
       errorBuffer[index + w + 1] += (int) sixteenth;
 #else
-      // Atkinson
+      // Atkinson /*
       int eigth = (int) error / 8.0f;
       errorBuffer[index + 1] += eigth;
       errorBuffer[index + 2] += eigth;
@@ -79,6 +79,7 @@ void Satcaster::render(int buffer[], int w, int h) {
       errorBuffer[index + w + 2] += eigth;
       errorBuffer[index + w - 2] += eigth;
       errorBuffer[index + w * 2] += eigth;
+      /* */
 #endif
     }
   }
