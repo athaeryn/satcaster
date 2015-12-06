@@ -6,8 +6,10 @@ public:
   Buffer(int w, int h);
   int w;
   int h;
-  int *data;
   ~Buffer();
+  int& operator[] (int index) const;
+private:
+  int *data;
 };
 
 #endif

@@ -29,7 +29,7 @@ string write_pbm(const Buffer &buffer) {
   pbm << "255" << endl;
   for (int y = 0; y < h; y++) {
     for (int x = 0; x < w; x++) {
-      pbm << " " << buffer.data[y * w + x];
+      pbm << " " << buffer[y * w + x];
     }
     pbm << endl;
   }

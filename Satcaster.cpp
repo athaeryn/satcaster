@@ -74,10 +74,10 @@ void Satcaster::render(Buffer &buffer) {
       int error;
       if (abs(diffFromHigh) < abs(diffFromLow)) {
         error = diffFromHigh;
-        buffer.data[index] = 255;
+        buffer[index] = 255;
       } else {
         error = diffFromLow;
-        buffer.data[index] = 0;
+        buffer[index] = 0;
       }
 #if 1
       // Floyd-Steinberg
