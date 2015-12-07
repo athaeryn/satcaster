@@ -12,9 +12,10 @@ void Satcaster::add_body(float x, float y, float z, float r, string seed) {
 void Satcaster::render(Buffer &buffer) {
   int w = buffer.w;
   int h = buffer.h;
-  int rawBuffer[w * h];
   float aspect = w / h;
   float fov = tan(camera.fov / 2 * M_PI / 180);
+
+  Buffer rawBuffer (w, h);
 
   for (int y = 0; y < h; y++) {
     for (int x = 0; x < w; x++) {
@@ -59,7 +60,7 @@ void Satcaster::render(Buffer &buffer) {
   // TODO: move dithering to its own function(s)
   // eventually the dithering algorithm could be chosen with a command line flag
 
-  int errorBuffer[(w + 1) * (h + 1)];
+  int *errorBuffer = new int[(w + 1) * (h + 1)];
   for (int i = 0; i < w * h; i++) {
     errorBuffer[i] = 0;
   }
@@ -105,6 +106,7 @@ void Satcaster::render(Buffer &buffer) {
     }
   }
 }
+
 
 bool Satcaster::get_intersection(Intersection &intersection, const Ray ray, const Sphere sphere) {
   float t0 = get_intersection_distance(ray, sphere);
