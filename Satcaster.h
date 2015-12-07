@@ -10,8 +10,6 @@
 #include "Vec3.h"
 
 using namespace std;
-using namespace vec;
-
 
 struct Intersection {
   Vec3 pos;

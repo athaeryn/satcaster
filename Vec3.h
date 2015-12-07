@@ -3,24 +3,27 @@
 
 #include <string>
 
-struct Vec3 {
+class Vec3 {
+public:
   float x;
   float y;
   float z;
+
+  Vec3 ();
+  Vec3 (float x, float y, float z);
+
+  Vec3 operator+(const Vec3 &other) const;
+  Vec3 operator-(const Vec3 &other) const;
+  Vec3 operator*(float scalar) const;
+  Vec3 norm();
+
+  float mag_sq();
+  float mag();
+
+  float dot(const Vec3 &other);
+
+  std::string to_string();
 };
-
-namespace vec {
-  Vec3 make(float x, float y, float z);
-  Vec3 add(Vec3 a, Vec3 b);
-  Vec3 sub(Vec3 a, Vec3 b);
-  Vec3 norm(Vec3 v);
-  Vec3 mult(Vec3 v, float scalar);
-  float mag_sq(Vec3 v);
-  float mag(Vec3 v);
-  float dot(Vec3 a, Vec3 b);
-
-  std::string to_string(Vec3 v);
-}
 
 #endif
 

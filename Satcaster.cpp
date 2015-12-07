@@ -4,7 +4,8 @@
 #define FAR 1000
 
 void Satcaster::add_body(float x, float y, float z, float r, string seed) {
-  Sphere s(vec::make(x, y, z), r, seed);
+  Vec3 center (x, y, z);
+  Sphere s(center, r, seed);
   spheres.push_back(s);
 }
 
@@ -21,7 +22,7 @@ void Satcaster::render(Buffer &buffer) {
     for (int x = 0; x < w; x++) {
       float nx = ((2 * (x + .5) / w) - 1) * aspect * fov;
       float ny = 1 - (2 * (y + .5) / h) * fov;
-      Vec3 rayDirection = norm(add(add(vec::make(nx, ny, 0), camera.pos), camera.dir));
+      Vec3 rayDirection = (Vec3(nx, ny, 0) + camera.pos + camera.dir).norm();
 
       Intersection nearestIntersection = { camera.pos, camera.dir, FAR };
 
@@ -36,7 +37,7 @@ void Satcaster::render(Buffer &buffer) {
       }
 
       if (nearestIntersection.t < FAR) {
-        Vec3 lightDir = norm(sub(light, nearestIntersection.pos));
+        Vec3 lightDir = (light - nearestIntersection.pos).norm();
         bool seesTheLight = true;
         Ray ray = { nearestIntersection.pos, lightDir };
         for (Sphere s : spheres) {
@@ -45,7 +46,7 @@ void Satcaster::render(Buffer &buffer) {
           }
         }
         if (seesTheLight) {
-          float angleToLight = dot(lightDir, nearestIntersection.normal);
+          float angleToLight = lightDir.dot(nearestIntersection.normal);
           rawBuffer[y * w + x] = 255 * angleToLight;
         } else {
           rawBuffer[y * w + x] = 0;
@@ -112,8 +113,8 @@ bool Satcaster::get_intersection(Intersection &intersection, const Ray ray, cons
   float t0 = get_intersection_distance(ray, sphere);
   if (t0 < 0) return false;
 
-  Vec3 hit = add(ray.origin, mult(ray.dir, t0));
-  Vec3 normal = norm(sub(hit, sphere.pos));
+  Vec3 hit = ray.origin + ray.dir * t0;
+  Vec3 normal = (hit - sphere.pos).norm();
 
   intersection.pos = hit;
   intersection.normal = normal;
@@ -128,10 +129,10 @@ bool Satcaster::get_intersection(Intersection &intersection, const Ray ray, cons
 float Satcaster::get_intersection_distance(const Ray &ray, const Sphere &sphere) {
   float no_intersection = -1;
 
-  Vec3 L = sub(sphere.pos, ray.origin);
-  float tca = dot(L, ray.dir);
+  Vec3 L = sphere.pos - ray.origin;
+  float tca = L.dot(ray.dir);
   if (tca < 0) return no_intersection;
-  float d2 = dot(L, L) - tca * tca;
+  float d2 = L.dot(L) - tca * tca;
   if (d2 > sphere.r) return no_intersection;
   float thc = sqrt(sphere.r - d2);
   float t0 = tca - thc;

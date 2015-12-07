@@ -9,8 +9,8 @@ struct Camera {
   float fov;
 
   Camera() {
-    pos = vec::make(0, 0, 0);
-    dir = vec::make(0, 0, -1);
+    pos = Vec3(0, 0, 0);
+    dir = Vec3(0, 0, -1);
     fov = 90;
   }
 

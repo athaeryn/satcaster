@@ -1,60 +1,63 @@
 #include <cmath>
 #include "Vec3.h"
 
-Vec3 vec::make(float x, float y, float z) {
-  Vec3 v;
-  v.x = x;
-  v.y = y;
-  v.z = z;
-  return v;
+Vec3::Vec3 () {
+  x = 0;
+  y = 0;
+  z = 0;
 }
 
-Vec3 vec::add(Vec3 a, Vec3 b) {
-  Vec3 c;
-  c.x = a.x + b.x;
-  c.y = a.y + b.y;
-  c.z = a.z + b.z;
-  return c;
+Vec3::Vec3 (float _x, float _y, float _z) {
+  x = _x;
+  y = _y;
+  z = _z;
 }
 
-Vec3 vec::sub(Vec3 a, Vec3 b) {
-  Vec3 c;
-  c.x = a.x - b.x;
-  c.y = a.y - b.y;
-  c.z = a.z - b.z;
-  return c;
-}
-
-Vec3 vec::mult(Vec3 v, float scalar) {
-  Vec3 v2 = vec::make(
-    v.x * scalar,
-    v.y * scalar,
-    v.z * scalar
+Vec3 Vec3::operator+ (const Vec3 &other) const {
+  Vec3 result (
+    x + other.x,
+    y + other.y,
+    z + other.z
   );
-  return v2;
+  return result;
 }
 
-float vec::mag_sq(Vec3 v) {
-  return pow(v.x, 2) + pow(v.y, 2) + pow(v.z, 2);
+Vec3 Vec3::operator- (const Vec3 &other) const{
+  Vec3 result (
+    x - other.x,
+    y - other.y,
+    z - other.z
+  );
+  return result;
 }
 
-float vec::mag(Vec3 v) {
-  return sqrt(vec::mag_sq(v));
+Vec3 Vec3::operator* (float scalar) const {
+  Vec3 result (
+    x * scalar,
+    y * scalar,
+    z * scalar
+  );
+  return result;
 }
 
-float vec::dot(Vec3 a, Vec3 b) {
-  return a.x * b.x + a.y * b.y + a.z * b.z;
+float Vec3::mag_sq() {
+  return pow(x, 2) + pow(y, 2) + pow(z, 2);
 }
 
-Vec3 vec::norm(Vec3 v) {
-  float mag = vec::mag(v);
-  Vec3 normed;
-  normed.x = v.x / mag;
-  normed.y = v.y / mag;
-  normed.z = v.z / mag;
+float Vec3::mag() {
+  return sqrt(mag_sq());
+}
+
+float Vec3::dot(const Vec3 &other) {
+  return x * other.x + y * other.y + z * other.z;
+}
+
+Vec3 Vec3::norm() {
+  float _mag = mag();
+  Vec3 normed (x / _mag, y / _mag, z / _mag);
   return normed;
 }
 
-std::string vec::to_string(Vec3 v) {
-  return "<Vec3 x=" + std::to_string(v.x) + " y=" + std::to_string(v.y) + " z=" + std::to_string(v.z) + ">";
+std::string Vec3::to_string() {
+  return "<Vec3 x=" + std::to_string(x) + " y=" + std::to_string(y) + " z=" + std::to_string(z) + ">";
 }
