@@ -3,9 +3,7 @@
 
 #define FAR 1000
 
-void Satcaster::add_body(float x, float y, float z, float r, string seed) {
-  Vec3 center (x, y, z);
-  Sphere s(center, r, seed);
+void Satcaster::add_body(Sphere &s) {
   spheres.push_back(s);
 }
 
@@ -57,9 +55,14 @@ void Satcaster::render(Buffer &buffer) {
     }
   }
 
+  dither(rawBuffer, buffer);
+}
 
-  // TODO: move dithering to its own function(s)
-  // eventually the dithering algorithm could be chosen with a command line flag
+
+// eventually the dithering algorithm could be chosen with a command line flag
+void Satcaster::dither(const Buffer &rawBuffer, Buffer &output) {
+  int w = output.w;
+  int h = output.h;
 
   int *errorBuffer = new int[(w + 1) * (h + 1)];
   for (int i = 0; i < w * h; i++) {
@@ -76,10 +79,10 @@ void Satcaster::render(Buffer &buffer) {
       int error;
       if (abs(diffFromHigh) < abs(diffFromLow)) {
         error = diffFromHigh;
-        buffer[index] = 255;
+        output[index] = 255;
       } else {
         error = diffFromLow;
-        buffer[index] = 0;
+        output[index] = 0;
       }
 #if 1
       // Floyd-Steinberg

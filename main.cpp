@@ -102,7 +102,7 @@ int main(int argc, char **argv) {
   satcaster.light = config.light;
   satcaster.camera = config.camera;
   for (Sphere s: config.spheres) {
-    satcaster.add_body(s.pos.x, s.pos.y, s.pos.z, s.r, s.seed);
+    satcaster.add_body(s);
   }
 
   Buffer buffer(config.width, config.height);
