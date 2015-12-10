@@ -4,10 +4,7 @@ Buffer::Buffer(int width, int height) {
   w = width;
   h = height;
   int pixelCount = width * height;
-  data = new int [width * height];
-  for (int i = 0; i < pixelCount; i++) {
-    data[i] = 0;
-  }
+  data = new int [width * height] ();
 }
 
 int& Buffer::operator[] (int index) const {
@@ -15,5 +12,5 @@ int& Buffer::operator[] (int index) const {
 }
 
 Buffer::~Buffer() {
-  delete data;
+  delete[] data;
 }

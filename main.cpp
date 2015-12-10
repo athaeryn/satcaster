@@ -105,10 +105,9 @@ int main(int argc, char **argv) {
     satcaster.add_body(s);
   }
 
-  Buffer buffer(config.width, config.height);
-
-  satcaster.render(buffer);
-  cout << write_pbm(buffer);
+  Buffer *buffer = satcaster.render(config.width, config.height);
+  cout << write_pbm(*buffer);
+  delete buffer;
 
   return 0;
 }

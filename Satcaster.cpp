@@ -8,81 +8,70 @@ void Satcaster::add_body(Sphere &s) {
 }
 
 
-void Satcaster::render(Buffer &buffer) {
-  int w = buffer.w;
-  int h = buffer.h;
+Buffer* Satcaster::render(int w, int h) {
   float aspect = w / h;
   float fov = tan(camera.fov / 2 * M_PI / 180);
 
-  Buffer rawBuffer (w, h);
+  Buffer rawBuffer(w, h);
 
   for (int y = 0; y < h; y++) {
     for (int x = 0; x < w; x++) {
       float nx = ((2 * (x + .5) / w) - 1) * aspect * fov;
       float ny = 1 - (2 * (y + .5) / h) * fov;
       Vec3 rayDirection = (Vec3(nx, ny, 0) + camera.pos + camera.dir).norm();
+      Ray ray = { camera.pos, rayDirection };
 
-      Intersection nearestIntersection = { camera.pos, camera.dir, FAR };
-
+      Intersection *nearestIntersection = nullptr;
       for (Sphere sphere : spheres) {
-        Intersection intersection;
-        Ray ray = { camera.pos, rayDirection };
-        if (get_intersection(intersection, ray, sphere)) {
-          if (intersection.t < nearestIntersection.t) {
+        Intersection *intersection = get_intersection(ray, sphere);
+        if (intersection != nullptr) {
+          if (!nearestIntersection || intersection->t < nearestIntersection->t) {
             nearestIntersection = intersection;
           }
         }
       }
 
-      if (nearestIntersection.t < FAR) {
-        Vec3 lightDir = (light - nearestIntersection.pos).norm();
-        bool seesTheLight = true;
-        Ray ray = { nearestIntersection.pos, lightDir };
-        for (Sphere s : spheres) {
-          if (get_intersection_distance(ray, s) > -1) {
-            seesTheLight = false;
-          }
-        }
-        if (seesTheLight) {
-          float angleToLight = lightDir.dot(nearestIntersection.normal);
-          rawBuffer[y * w + x] = 255 * angleToLight;
-        } else {
-          rawBuffer[y * w + x] = 0;
-        }
-      } else {
-        rawBuffer[y * w + x] = 0;
-      }
+      if (!nearestIntersection || nearestIntersection->t > FAR) continue;
+
+      Vec3 lightDir = (light - nearestIntersection->pos).norm();
+      Ray lightRay = { nearestIntersection->pos, lightDir };
+      bool shadowed = any_of(spheres.begin(), spheres.end(), [=](Sphere s) {
+        return get_intersection_distance(lightRay, s) > -1;
+      });
+
+      if (shadowed) continue;
+
+      float angleToLight = lightDir.dot(nearestIntersection->normal);
+      rawBuffer[y * w + x] = 255 * angleToLight;
     }
   }
 
-  dither(rawBuffer, buffer);
+  return dither(rawBuffer);
 }
 
 
 // eventually the dithering algorithm could be chosen with a command line flag
-void Satcaster::dither(const Buffer &rawBuffer, Buffer &output) {
-  int w = output.w;
-  int h = output.h;
+Buffer* Satcaster::dither(const Buffer &rawBuffer) {
+  int w = rawBuffer.w;
+  int h = rawBuffer.h;
 
-  int *errorBuffer = new int[(w + 1) * (h + 1)];
-  for (int i = 0; i < w * h; i++) {
-    errorBuffer[i] = 0;
-  }
+  Buffer *output = new Buffer(w, h);
+
+  int *errorBuffer = new int[(w + 1) * (h + 1)] ();
 
   for (int y = 0; y < h; y++) {
     for (int x = 0; x < w; x++) {
       int index = y * w + x;
-      /* buffer[index] = rawBuffer[index]; continue; */
       int raw = rawBuffer[index] + errorBuffer[index];
       int diffFromHigh = raw - 255;
       int diffFromLow = raw;
       int error;
       if (abs(diffFromHigh) < abs(diffFromLow)) {
         error = diffFromHigh;
-        output[index] = 255;
+        (*output)[index] = 255;
       } else {
         error = diffFromLow;
-        output[index] = 0;
+        (*output)[index] = 0;
       }
 #if 1
       // Floyd-Steinberg
@@ -109,20 +98,22 @@ void Satcaster::dither(const Buffer &rawBuffer, Buffer &output) {
 #endif
     }
   }
+  return output;
 }
 
 
-bool Satcaster::get_intersection(Intersection &intersection, const Ray ray, const Sphere sphere) {
+Intersection* Satcaster::get_intersection(const Ray ray, const Sphere sphere) {
   float t0 = get_intersection_distance(ray, sphere);
-  if (t0 < 0) return false;
+  if (t0 < 0) return nullptr;
 
   Vec3 hit = ray.origin + ray.dir * t0;
   Vec3 normal = (hit - sphere.pos).norm();
 
-  intersection.pos = hit;
-  intersection.normal = normal;
-  intersection.t = t0;
-  return true;
+  Intersection *intersection = new Intersection;
+  intersection->pos = hit;
+  intersection->normal = normal;
+  intersection->t = t0;
+  return intersection;
 }
 
 
