@@ -3,14 +3,12 @@
 
 #define FAR 1000
 
-void Satcaster::add_body(Sphere &s) {
-  spheres.push_back(s);
-}
+Buffer* Satcaster::render(const Scene& scene) {
+  int w = scene.width;
+  int h = scene.height;
 
-
-Buffer* Satcaster::render(int w, int h) {
   float aspect = w / h;
-  float fov = tan(camera.fov / 2 * M_PI / 180);
+  float fov = tan(scene.camera.fov / 2 * M_PI / 180);
 
   Buffer rawBuffer(w, h);
 
@@ -18,11 +16,11 @@ Buffer* Satcaster::render(int w, int h) {
     for (int x = 0; x < w; x++) {
       float nx = ((2 * (x + .5) / w) - 1) * aspect * fov;
       float ny = 1 - (2 * (y + .5) / h) * fov;
-      Vec3 rayDirection = (Vec3(nx, ny, 0) + camera.pos + camera.dir).norm();
-      Ray ray = { camera.pos, rayDirection };
+      Vec3 rayDirection = (Vec3(nx, ny, 0) + scene.camera.pos + scene.camera.dir).norm();
+      Ray ray = { scene.camera.pos, rayDirection };
 
       Intersection *nearestIntersection = nullptr;
-      for (Sphere sphere : spheres) {
+      for (Sphere sphere : scene.spheres) {
         Intersection *intersection = get_intersection(ray, sphere);
         if (intersection != nullptr) {
           if (!nearestIntersection || intersection->t < nearestIntersection->t) {
@@ -33,10 +31,10 @@ Buffer* Satcaster::render(int w, int h) {
 
       if (!nearestIntersection || nearestIntersection->t > FAR) continue;
 
-      Vec3 lightDir = (light - nearestIntersection->pos).norm();
+      Vec3 lightDir = (scene.light - nearestIntersection->pos).norm();
       Ray lightRay = { nearestIntersection->pos, lightDir };
-      bool shadowed = any_of(spheres.begin(), spheres.end(), [=](Sphere s) {
-        return get_intersection_distance(lightRay, s) > -1;
+      bool shadowed = any_of(scene.spheres.begin(), scene.spheres.end(), [=](Sphere s) {
+        return get_intersection_distance(lightRay, s) > 0;
       });
 
       if (shadowed) continue;
@@ -102,7 +100,7 @@ Buffer* Satcaster::dither(const Buffer &rawBuffer) {
 }
 
 
-Intersection* Satcaster::get_intersection(const Ray ray, const Sphere sphere) {
+Intersection* Satcaster::get_intersection(const Ray &ray, const Sphere &sphere) {
   float t0 = get_intersection_distance(ray, sphere);
   if (t0 < 0) return nullptr;
 
@@ -126,7 +124,7 @@ float Satcaster::get_intersection_distance(const Ray &ray, const Sphere &sphere)
   Vec3 L = sphere.pos - ray.origin;
   float tca = L.dot(ray.dir);
   if (tca < 0) return no_intersection;
-  float d2 = L.dot(L) - tca * tca;
+  float d2 = L.mag_sq() - tca * tca;
   if (d2 > sphere.r) return no_intersection;
   float thc = sqrt(sphere.r - d2);
   float t0 = tca - thc;

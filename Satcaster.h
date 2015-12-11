@@ -3,11 +3,11 @@
 
 #include <cmath>
 #include <string>
-#include <vector>
 #include "Buffer.h"
 #include "Camera.h"
 #include "Sphere.h"
 #include "Vec3.h"
+#include "Scene.h"
 
 using namespace std;
 
@@ -24,15 +24,11 @@ struct Ray {
 
 class Satcaster {
 public:
-  Camera camera;
-  Vec3 light;
-  void add_body(Sphere &s);
-  Buffer* render(int width, int height);
+  Buffer* render(const Scene& scene);
 private:
-  vector<Sphere> spheres;
-  Buffer* dither(const Buffer &rawBuffer);
-  Intersection* get_intersection(const Ray ray, const Sphere sphere);
+  Intersection* get_intersection(const Ray &ray, const Sphere &sphere);
   float get_intersection_distance(const Ray &ray, const Sphere &sphere);
+  Buffer* dither(const Buffer &rawBuffer);
 };
 
 

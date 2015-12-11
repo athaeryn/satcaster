@@ -7,16 +7,9 @@
 #include "Buffer.h"
 #include "Vec3.h"
 #include "Satcaster.h"
+#include "Scene.h"
 
 using namespace std;
-
-struct Config {
-  Camera camera;
-  Vec3 light;
-  vector<Sphere> spheres;
-  int height;
-  int width;
-};
 
 
 string write_pbm(const Buffer &buffer) {
@@ -38,7 +31,7 @@ string write_pbm(const Buffer &buffer) {
 }
 
 
-Config read_config(const string filename) {
+Scene read_config(const string filename) {
   ifstream configFile(filename);
 
   regex comment("^#.*$");
@@ -49,7 +42,7 @@ Config read_config(const string filename) {
   regex light("^" + triple + "$");
   regex planet("^" + triple + " " + num + " (.*)$");
 
-  Config conf;
+  Scene scene;
 
   for (string line; getline(configFile, line);) {
     if (line.empty() || regex_match(line, comment)) continue;
@@ -57,20 +50,20 @@ Config read_config(const string filename) {
     if (regex_match(line, capture, dimensions)) {
       int width = stoi(capture[1].str());
       int height = stoi(capture[2].str());
-      conf.height = height;
-      conf.width = width;
+      scene.height = height;
+      scene.width = width;
     } else if (regex_match(line, capture, camera)) {
-      conf.camera.pos.x = stof(capture[1].str());
-      conf.camera.pos.y = stof(capture[2].str());
-      conf.camera.pos.z = stof(capture[3].str());
-      conf.camera.dir.x = stof(capture[4].str());
-      conf.camera.dir.y = stof(capture[5].str());
-      conf.camera.dir.z = stof(capture[6].str());
-      conf.camera.fov = stof(capture[7].str());
+      scene.camera.pos.x = stof(capture[1].str());
+      scene.camera.pos.y = stof(capture[2].str());
+      scene.camera.pos.z = stof(capture[3].str());
+      scene.camera.dir.x = stof(capture[4].str());
+      scene.camera.dir.y = stof(capture[5].str());
+      scene.camera.dir.z = stof(capture[6].str());
+      scene.camera.fov = stof(capture[7].str());
     } else if (regex_match(line, capture, light)) {
-      conf.light.x = stof(capture[1].str());
-      conf.light.y = stof(capture[2].str());
-      conf.light.z = stof(capture[3].str());
+      scene.light.x = stof(capture[1].str());
+      scene.light.y = stof(capture[2].str());
+      scene.light.z = stof(capture[3].str());
     } else if (regex_match(line, capture, planet)) {
       Vec3 pos;
       pos.x = stof(capture[1].str());
@@ -79,13 +72,13 @@ Config read_config(const string filename) {
       float r = stof(capture[4].str());
       string seed = capture[5].str();
       Sphere s(pos, r, seed);
-      conf.spheres.push_back(s);
+      scene.spheres.push_back(s);
     } else {
       cerr << "Couldn't parse line: " << line << endl;
     }
   }
 
-  return conf;
+  return scene;
 }
 
 
@@ -96,17 +89,12 @@ int main(int argc, char **argv) {
   }
 
   const char *configFilename = argv[1];
-  Config config = read_config(configFilename);
+  Scene scene = read_config(configFilename);
 
   Satcaster satcaster;
-  satcaster.light = config.light;
-  satcaster.camera = config.camera;
-  for (Sphere s: config.spheres) {
-    satcaster.add_body(s);
-  }
-
-  Buffer *buffer = satcaster.render(config.width, config.height);
+  Buffer *buffer = satcaster.render(scene);
   cout << write_pbm(*buffer);
+
   delete buffer;
 
   return 0;

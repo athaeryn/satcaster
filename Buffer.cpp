@@ -3,7 +3,6 @@
 Buffer::Buffer(int width, int height) {
   w = width;
   h = height;
-  int pixelCount = width * height;
   data = new int [width * height] ();
 }
 

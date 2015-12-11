@@ -16,7 +16,7 @@ app.get('/', (_, res) => res.sendFile(__dirname + '/public/index.html'))
 var chokidar = require('chokidar')
 var watcher = chokidar.watch('*.cpp', { ignoreInitial: true })
 watcher.add('*.h')
-watcher.add('scenes/simple.txt')
+watcher.add('scenes/*.txt')
 
 var mostRecentRender
 
@@ -70,7 +70,6 @@ function render () {
   var timingLabel = 'render'
   console.time(timingLabel)
   var time = +new Date()
-  var renderPath = 'preview/public/renders/' + time + '.bmp'
   var render = spawn('bin/satcaster', ['scenes/simple.txt'])
   var pbm = ''
   render.stdout.on('data', function (data) {
