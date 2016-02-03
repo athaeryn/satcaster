@@ -1,6 +1,6 @@
 extern crate cgmath;
 
-use cgmath::{Vector3};
+use cgmath::Vector3;
 
 
 pub struct Camera {

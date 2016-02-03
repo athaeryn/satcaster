@@ -5,7 +5,7 @@ use sdl2::pixels::PixelFormatEnum;
 use sdl2::rect::Rect;
 use sdl2::render::Renderer;
 use sdl2::render::Texture;
-use pixelbuffer::{PixelBuffer};
+use pixelbuffer::PixelBuffer;
 
 
 pub struct Display<'a> {
