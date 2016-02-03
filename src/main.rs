@@ -8,6 +8,9 @@ mod renderer;
 mod scene;
 mod sphere;
 
+use std::ops::Add;
+use std::ops::Sub;
+
 use camera::Camera;
 use display::Display;
 use pixelbuffer::PixelBuffer;
@@ -27,7 +30,7 @@ fn main() {
     {
         let sphere = Sphere::new(2f32, (0f32, 0f32, -5f32));
         let camera = Camera::new(0f32, 0f32, 0f32);
-        let light = Vector3 { x: 10f32, y: 10f32, z: 5f32 };
+        let light = Vector3 { x: -10f32, y: 10f32, z: 5f32 };
 
         scene = Scene {
             camera: camera,
@@ -37,17 +40,7 @@ fn main() {
     }
 
     let mut pixels = PixelBuffer::new(500, 500);
-
-    renderer::render(&scene, &mut pixels);
-
-    // // Draw to the pixels.
-    // for y in 0..pixels.height as usize {
-    //     for x in 0..pixels.width as usize {
-    //         pixels.set(x, y, color);
-    //     }
-    // }
-
-    display.draw(&pixels);
+    let mut dir = 1;
 
     'running: loop {
         for event in display.events.poll_iter() {
@@ -59,6 +52,18 @@ fn main() {
             }
         }
         // update
+        if scene.light.x > 20f32 {
+            dir = -1;
+        } else if scene.light.x < -20f32 {
+            dir = 1;
+        }
+        match dir {
+            1 => scene.light = scene.light.add(Vector3::unit_x()),
+            -1 => scene.light = scene.light.sub(Vector3::unit_x()),
+            _ => {}
+        }
         // render
+        renderer::render(&scene, &mut pixels);
+        display.draw(&pixels);
     }
 }
