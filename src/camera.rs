@@ -1,5 +1,7 @@
 extern crate cgmath;
 
+use std::ops::Sub;
+use cgmath::EuclideanVector;
 use cgmath::Vector3;
 
 

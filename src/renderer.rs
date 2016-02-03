@@ -31,23 +31,36 @@ pub fn render(scene: &Scene, pixels: &mut PixelBuffer) {
             let mut nearest_intersection: Option<Intersection> = None;
             for sphere in scene.spheres.iter() {
                 // TODO: Actually find the nearest one.
-                nearest_intersection = get_intersection(&ray, &sphere);
+                if let Some(i) = get_intersection(&ray, &sphere) {
+                    nearest_intersection = Some(i);
+                }
             }
 
             if let Some(intersection) = nearest_intersection {
                 let light_dir = scene.light.sub(intersection.pos).normalize();
-                // TODO: shadows
-                // let lightRay = Ray {
-                //     pos: intersection.pos,
-                //     dir: light_dir
-                // };
+                let lightRay = Ray { pos: intersection.pos, dir: light_dir };
+                let mut shadowed = false;
+                for sphere in scene.spheres.iter() {
+                    if let Some(i) = get_intersection(&lightRay, &sphere) {
+                        shadowed = true;
+                        break;
+                    }
+                }
+                if shadowed {
+                    pixels.set(x, y, 0);
+                    continue;
+                }
                 let angle_to_light = light_dir.dot(intersection.normal);
                 let mut value = 255f32 * angle_to_light;
                 if value < 0f32 { value = 0f32 }
-                pixels.set(x, y, value as u8)
+                pixels.set(x, y, value as u8);
+            } else {
+                pixels.set(x, y, 0);
             }
         }
     }
+
+    // TODO: dither!
 }
 
 
@@ -73,6 +86,7 @@ fn get_intersection (ray: &Ray, sphere: &Sphere) -> Option<Intersection> {
 // http://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-sphere-intersection
 fn get_intersction_dist (ray: &Ray, sphere: &Sphere) -> f32 {
     let no_intersection = -1f32;
+
     let L = sphere.pos.sub(ray.pos);
     let tca: f32 = L.dot(ray.dir);
     if tca < 0f32 { return no_intersection }
@@ -98,6 +112,7 @@ struct Ray {
     pos: Vector3<f32>,
     dir: Vector3<f32>
 }
+
 
 struct Intersection {
     pos: Vector3<f32>,
