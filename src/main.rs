@@ -1,17 +1,18 @@
 extern crate cgmath;
 extern crate sdl2;
 
-mod pixelbuffer;
 mod camera;
 mod display;
-mod sphere;
+mod pixelbuffer;
+mod renderer;
 mod scene;
+mod sphere;
 
-use pixelbuffer::PixelBuffer;
 use camera::Camera;
 use display::Display;
-use sphere::Sphere;
+use pixelbuffer::PixelBuffer;
 use scene::Scene;
+use sphere::Sphere;
 
 use sdl2::event::Event;
 use sdl2::keyboard::Keycode;
@@ -24,18 +25,20 @@ fn main() {
 
     let mut scene;
     {
-        let sphere = Sphere::new(1f32, (0f32, 0f32, 0f32));
-        let camera = Camera::new(0f32, 0f32, 10f32);
-        let light = Vector3 { x: 5f32, y: -5f32, z: 5f32 };
+        let sphere = Sphere::new(2f32, (0f32, 0f32, -5f32));
+        let camera = Camera::new(0f32, 0f32, 0f32);
+        let light = Vector3 { x: 10f32, y: 10f32, z: 5f32 };
 
         scene = Scene {
             camera: camera,
             spheres: vec![sphere],
-            lights: vec![light]
+            light: light
         };
     }
 
     let mut pixels = PixelBuffer::new(500, 500);
+
+    renderer::render(&scene, &mut pixels);
 
     // // Draw to the pixels.
     // for y in 0..pixels.height as usize {

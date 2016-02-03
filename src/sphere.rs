@@ -2,8 +2,8 @@ use cgmath::Vector3;
 
 
 pub struct Sphere {
-    rad: f32,
-    pos: Vector3<f32>
+    pub rad: f32,
+    pub pos: Vector3<f32>
 }
 
 impl Sphere {

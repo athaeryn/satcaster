@@ -42,13 +42,13 @@ impl<'a> Display<'a> {
 
     pub fn draw (&mut self, pixels: &PixelBuffer) {
         // TODO: just use self.{w.h} in the closure somehow.
-        let w = self.width;
-        let h = self.height;
+        let w = self.width as usize;
+        let h = self.height as usize;
 
         // Copy to the texture.
         self.texture.with_lock(None, |buffer: &mut [u8], pitch: usize| {
-            for y in 0..w as usize {
-                for x in 0..h as usize {
+            for y in 0..w {
+                for x in 0..h {
                     let offset = y * pitch + x * 3;
                     let color = pixels.get(x, y);
                     buffer[offset + 0] = color;
