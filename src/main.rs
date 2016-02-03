@@ -45,7 +45,7 @@ fn main() {
         // Draw to the pixels.
         for y in 0..pixels.height as usize {
             for x in 0..pixels.width as usize {
-                let color = if x % count as usize == 0 { 255 } else { 0 };
+                let color = if (x as f64 * (y as f64 * 4f64).sin()) as usize % count as usize == 0 { 255 } else { 0 };
                 pixels.set(x, y, color);
             }
         }
