@@ -22,7 +22,10 @@ pub fn render(scene: &Scene, pixels: &mut PixelBuffer) {
             // "Screen" coordinates
             let sx = ((2f32 * (x as f32 + 0.5f32) / pixels.width as f32) - 1f32) * aspect * fov;
             let sy = 1f32 - (2f32 * (y as f32 + 0.5f32) / pixels.height as f32) * fov;
-            let ray_dir: Vector3<f32> = (Vector3 { x: sx, y: sy, z: 0f32 }).add(scene.camera.pos).add(scene.camera.dir).normalize();
+            let ray_dir: Vector3<f32> = (Vector3 { x: sx, y: sy, z: 0f32 })
+                .add(scene.camera.pos)
+                .add(scene.camera.dir)
+                .normalize();
             let ray = Ray {
                 pos: scene.camera.pos,
                 dir: ray_dir
@@ -30,9 +33,17 @@ pub fn render(scene: &Scene, pixels: &mut PixelBuffer) {
 
             let mut nearest_intersection: Option<Intersection> = None;
             for sphere in scene.spheres.iter() {
-                // TODO: Actually find the nearest one.
                 if let Some(i) = get_intersection(&ray, &sphere) {
-                    nearest_intersection = Some(i);
+                    match nearest_intersection {
+                        Some(n) => {
+                            if i.z <= n.z {
+                                nearest_intersection = Some(i)
+                            }
+                        },
+                        None => {
+                            nearest_intersection = Some(i)
+                        }
+                    }
                 }
             }
 
@@ -112,6 +123,7 @@ struct Ray {
 }
 
 
+#[derive(Copy, Clone)]
 struct Intersection {
     pos: Vector3<f32>,
     normal: Vector3<f32>,
