@@ -38,10 +38,10 @@ pub fn render(scene: &Scene, pixels: &mut PixelBuffer) {
 
             if let Some(intersection) = nearest_intersection {
                 let light_dir = scene.light.sub(intersection.pos).normalize();
-                let lightRay = Ray { pos: intersection.pos, dir: light_dir };
+                let light_ray = Ray { pos: intersection.pos, dir: light_dir };
                 let mut shadowed = false;
                 for sphere in scene.spheres.iter() {
-                    if let Some(i) = get_intersection(&lightRay, &sphere) {
+                    if let Some(_) = get_intersection(&light_ray, &sphere) {
                         shadowed = true;
                         break;
                     }
@@ -59,8 +59,6 @@ pub fn render(scene: &Scene, pixels: &mut PixelBuffer) {
             }
         }
     }
-
-    // TODO: dither!
 }
 
 
@@ -87,10 +85,10 @@ fn get_intersection (ray: &Ray, sphere: &Sphere) -> Option<Intersection> {
 fn get_intersction_dist (ray: &Ray, sphere: &Sphere) -> f32 {
     let no_intersection = -1f32;
 
-    let L = sphere.pos.sub(ray.pos);
-    let tca: f32 = L.dot(ray.dir);
+    let l = sphere.pos.sub(ray.pos);
+    let tca: f32 = l.dot(ray.dir);
     if tca < 0f32 { return no_intersection }
-    let d2 = L.length2() - tca * tca;
+    let d2 = l.length2() - tca * tca;
     if d2 > sphere.rad { return no_intersection }
     let thc = (sphere.rad - d2).sqrt();
     let mut t0 = tca - thc;

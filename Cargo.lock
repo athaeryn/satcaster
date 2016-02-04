@@ -3,6 +3,7 @@ name = "satcaster"
 version = "0.1.0"
 dependencies = [
  "cgmath 0.7.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "rand 0.3.13 (registry+https://github.com/rust-lang/crates.io-index)",
  "sdl2 0.12.1 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 

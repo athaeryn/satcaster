@@ -3,6 +3,7 @@ extern crate sdl2;
 
 mod camera;
 mod display;
+mod ditherer;
 mod pixelbuffer;
 mod renderer;
 mod scene;
@@ -40,7 +41,6 @@ fn main() {
         };
     }
 
-    let mut pixels = PixelBuffer::new(500, 500);
     let mut dir = 1;
 
     'running: loop {
@@ -63,8 +63,11 @@ fn main() {
             -1 => scene.light = scene.light.sub(Vector3::unit_x()),
             _ => {}
         }
+
         // render
+        let mut pixels = PixelBuffer::new(500, 500);
         renderer::render(&scene, &mut pixels);
+        pixels = ditherer::dither(&mut pixels);
         display.draw(&pixels);
     }
 }

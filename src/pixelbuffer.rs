@@ -5,19 +5,16 @@ pub struct PixelBuffer {
 }
 
 impl PixelBuffer {
-    pub fn new (width: u32, height: u32) -> PixelBuffer {
-        let w = width as usize;
-        let h = height as usize;
-        let capacity = w * h;
-        let mut vec = Vec::with_capacity(capacity);
-        for _ in 0..capacity {
-            vec.push(0);
-        }
+    pub fn new (w: usize, h: usize) -> PixelBuffer {
         PixelBuffer {
-            data: vec,
+            data: vec![0; w * h],
             width: w,
             height: h
         }
+    }
+
+    pub fn with_same_shape_as(other: &PixelBuffer) -> PixelBuffer {
+        PixelBuffer::new(other.width, other.height)
     }
 
     pub fn set (&mut self, x: usize, y: usize, value: u8) {
