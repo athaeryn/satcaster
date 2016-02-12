@@ -1,17 +1,14 @@
 satcaster
 =========
 
-![render](renders/1449064301.bmp)
+## !!!
 
-## Building
+I'm rewriting the Satcaster from scratch in Rust in this branch.
 
-```sh
-mkdir build
-cd build
-cmake ..
-cd ..
-make -C build
-```
+> render from the C++ version:
+
+![render](old_renders/1449064301.bmp)
+
 
 ## Text format
 

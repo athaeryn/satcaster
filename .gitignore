@@ -1,7 +1,1 @@
-/bin
-/build
-
-/node_modules
-
-/preview/public/renders/*.bmp
-
+/target
