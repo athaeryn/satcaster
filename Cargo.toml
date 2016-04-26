@@ -7,3 +7,4 @@ authors = ["Mike Anderson <hello@mrmikea.com>"]
 cgmath = "0.7.0"
 rand = "0.3.13"
 sdl2 = "0.12"
+glium = "*"
