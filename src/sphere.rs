@@ -1,6 +1,5 @@
 use cgmath::Vector3;
 
-
 pub struct Sphere {
     pub rad: f32,
     pub pos: Vector3<f32>

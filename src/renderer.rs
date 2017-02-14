@@ -1,6 +1,7 @@
 use std::ops::Add;
 use std::ops::Mul;
 use std::ops::Sub;
+use std::cmp::Ordering;
 
 use cgmath::Vector;
 use cgmath::Vector3;
@@ -22,6 +23,7 @@ pub fn render(scene: &Scene, pixels: &mut PixelBuffer) {
             // "Screen" coordinates
             let sx = ((2f32 * (x as f32 + 0.5f32) / pixels.width as f32) - 1f32) * aspect * fov;
             let sy = 1f32 - (2f32 * (y as f32 + 0.5f32) / pixels.height as f32) * fov;
+
             let ray_dir: Vector3<f32> = (Vector3 { x: sx, y: sy, z: 0f32 })
                 .add(scene.camera.pos)
                 .add(scene.camera.dir)
@@ -31,23 +33,13 @@ pub fn render(scene: &Scene, pixels: &mut PixelBuffer) {
                 dir: ray_dir
             };
 
-            let mut nearest_intersection: Option<Intersection> = None;
-            for sphere in scene.spheres.iter() {
-                if let Some(i) = get_intersection(&ray, &sphere) {
-                    match nearest_intersection {
-                        Some(n) => {
-                            if i.z <= n.z {
-                                nearest_intersection = Some(i)
-                            }
-                        },
-                        None => {
-                            nearest_intersection = Some(i)
-                        }
-                    }
-                }
-            }
+            let mut intersections: Vec<Intersection> = scene.spheres.iter()
+                .filter_map(|sphere| get_intersection(&ray, &sphere))
+                .collect();
 
-            if let Some(intersection) = nearest_intersection {
+            intersections.sort_by(|a, b| a.z.partial_cmp(&b.z).unwrap_or(Ordering::Equal));
+
+            if let Some(intersection) = intersections.first() {
                 let light_dir = scene.light.sub(intersection.pos).normalize();
                 let light_ray = Ray { pos: intersection.pos, dir: light_dir };
                 let mut shadowed = false;
