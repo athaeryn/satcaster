@@ -13,15 +13,26 @@ impl PixelBuffer {
         }
     }
 
-    pub fn with_same_shape_as(other: &PixelBuffer) -> PixelBuffer {
-        PixelBuffer::new(other.width, other.height)
-    }
-
     pub fn set (&mut self, x: usize, y: usize, value: u8) {
         self.data[x + y * self.width] = value;
     }
 
     pub fn get (&self, x: usize, y: usize) -> u8 {
         self.data[x + y * self.width]
+    }
+
+    pub fn print_pbm (&self) {
+        println!("P1");
+        println!("{} {}", self.width, self.height);
+        for y in 0..self.height {
+            for x in 0..self.width {
+                if self.get(x, y) > 0 {
+                    print!(" 0");
+                } else {
+                    print!(" 1");
+                }
+            }
+            print!("\n");
+        }
     }
 }
