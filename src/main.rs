@@ -32,5 +32,6 @@ fn main() {
     renderer::render(&scene, &mut pixels);
     ditherer::dither(&mut pixels);
 
-    pixels.print_pbm();
+    // pixels.print_pbm();
+    pixels.print_pgm();
 }

@@ -64,7 +64,7 @@ pub fn render(scene: &Scene, pixels: &mut PixelBuffer) {
                 let angle_to_light = light_dir.dot(intersection.normal);
                 let mut value = 255f32 * angle_to_light;
                 if value < 0f32 { value = 0f32 }
-                pixels.set(x, y, value as u8);
+                pixels.set(x, y, value as i32);
             } else {
                 pixels.set(x, y, 0);
             }
