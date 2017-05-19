@@ -6,12 +6,15 @@ use std::cmp::Ordering;
 use cgmath::Vector;
 use cgmath::Vector3;
 use cgmath::EuclideanVector;
+use noise::{NoiseModule, Perlin};
 
 use pixelbuffer::PixelBuffer;
 use scene::Scene;
 use sphere::Sphere;
 
 pub fn render(scene: &Scene, pixels: &mut PixelBuffer) {
+    let perlin = Perlin::new();
+
     let w = pixels.width as f32;
     let h = pixels.height as f32;
 

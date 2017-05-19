@@ -1,4 +1,5 @@
 extern crate cgmath;
+extern crate noise;
 
 mod camera;
 mod ditherer;
@@ -19,7 +20,7 @@ fn main() {
     let sphere1 = Sphere::new(2f32, (0f32, 0f32, -5f32));
     let sphere2 = Sphere::new(0.1f32, (2f32, 1f32, -5f32));
     let camera = Camera::new(0f32, 0f32, 0f32);
-    let light = Vector3 { x: 10f32, y: 3f32, z: 2f32 };
+    let light = Vector3 { x: 4f32, y: 13f32, z: 10f32 };
 
     let scene = Scene {
         camera: camera,
@@ -30,7 +31,7 @@ fn main() {
     // render
     let mut pixels = PixelBuffer::new(500, 500);
     renderer::render(&scene, &mut pixels);
-    ditherer::dither(&mut pixels);
+    // ditherer::dither(&mut pixels);
 
     // pixels.print_pbm();
     pixels.print_pgm();
