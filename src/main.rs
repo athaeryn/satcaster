@@ -1,4 +1,5 @@
 extern crate cgmath;
+extern crate noise;
 
 mod camera;
 mod ditherer;
@@ -17,9 +18,9 @@ use cgmath::Vector3;
 
 fn main() {
     let sphere1 = Sphere::new(2f32, (0f32, 0f32, -5f32));
-    let sphere2 = Sphere::new(0.1f32, (2f32, 1f32, -5f32));
+    let sphere2 = Sphere::new(0.25f32, (-2.75f32, -0.5f32, -6f32));
     let camera = Camera::new(0f32, 0f32, 0f32);
-    let light = Vector3 { x: 10f32, y: 3f32, z: 2f32 };
+    let light = Vector3 { x: 10f32, y: 10f32, z: 5f32 };
 
     let scene = Scene {
         camera: camera,

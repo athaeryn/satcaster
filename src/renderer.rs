@@ -6,12 +6,15 @@ use std::cmp::Ordering;
 use cgmath::Vector;
 use cgmath::Vector3;
 use cgmath::EuclideanVector;
+use noise::{NoiseModule, Perlin};
 
 use pixelbuffer::PixelBuffer;
 use scene::Scene;
 use sphere::Sphere;
 
 pub fn render(scene: &Scene, pixels: &mut PixelBuffer) {
+    let perlin = Perlin::new();
+
     let w = pixels.width as f32;
     let h = pixels.height as f32;
 
@@ -42,6 +45,7 @@ pub fn render(scene: &Scene, pixels: &mut PixelBuffer) {
             if let Some(intersection) = intersections.first() {
                 let light_dir = scene.light.sub(intersection.pos).normalize();
                 let light_ray = Ray { pos: intersection.pos, dir: light_dir };
+
                 let mut shadowed = false;
                 for sphere in scene.spheres.iter() {
                     if let Some(_) = get_intersection(&light_ray, &sphere) {
@@ -53,8 +57,20 @@ pub fn render(scene: &Scene, pixels: &mut PixelBuffer) {
                     pixels.set(x, y, 0);
                     continue;
                 }
+
                 let angle_to_light = light_dir.dot(intersection.normal);
-                let mut value = 255f32 * angle_to_light;
+
+                let from_sphere = intersection.pos.sub(intersection.sphere_pos).normalize();
+                let foo = from_sphere.mul(16f32);
+                let val: f32 = perlin.get([from_sphere.x, from_sphere.y, from_sphere.z]);
+                let val2: f32 = perlin.get([foo.x, foo.y, foo.z]);
+
+                let mut base = ((val + val2) * 155f32) + 200f32;
+                if base > 255f32 { base = 255f32 }
+                if base < 0f32 { base = 0f32 }
+
+                let mut value = base * angle_to_light;
+                if value > 255f32 { value = 255f32 }
                 if value < 0f32 { value = 0f32 }
                 pixels.set(x, y, value as i32);
             } else {
@@ -75,6 +91,7 @@ fn get_intersection (ray: &Ray, sphere: &Sphere) -> Option<Intersection> {
     let intersection = Intersection {
         pos: hit,
         normal: normal,
+        sphere_pos: sphere.pos,
         z: t0
     };
 
@@ -119,5 +136,6 @@ struct Ray {
 struct Intersection {
     pos: Vector3<f32>,
     normal: Vector3<f32>,
+    sphere_pos: Vector3<f32>,
     z: f32
 }
