@@ -3,28 +3,7 @@
 #[macro_use]
 extern crate stdweb;
 
-use stdweb::web::{
-    self,
-    IEventTarget,
-    INode,
-    IElement,
-    FileReader,
-    FileReaderResult,
-    Element,
-    ArrayBuffer
-};
-
-use stdweb::web::event::{
-    IEvent,
-    IKeyboardEvent,
-    ClickEvent,
-    ChangeEvent,
-    ProgressLoadEvent,
-    KeydownEvent,
-    KeyupEvent,
-    KeyboardLocation
-};
-
+use stdweb::web;
 
 extern crate cgmath;
 
@@ -49,7 +28,7 @@ fn main() {
     let canvas = web::document().get_element_by_id("viewport").unwrap();
     let ctx: stdweb::Value = js!( return @{canvas}.getContext("2d"); );
 
-    let draw_box = |ctx: &stdweb::Value, color: &str, pos: (f32, f32)| {
+    let draw_pixel = |ctx: &stdweb::Value, color: &str, pos: (f32, f32)| {
         js!(
             @{ctx}.beginPath();
             @{ctx}.rect(@{pos.0}, @{pos.1}, 1, 1);
@@ -78,7 +57,7 @@ fn main() {
         for x in 0..pixels.width {
             let value = pixels.get(x, y);
             let color = if value == 0i32 { "black" } else { "white" };
-            draw_box(&ctx, color, (x as f32, y as f32));
+            draw_pixel(&ctx, color, (x as f32, y as f32));
         }
     }
 

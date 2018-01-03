@@ -78,7 +78,7 @@ fn get_intersection (ray: &Ray, sphere: &Sphere) -> Option<Intersection> {
     let intersection = Intersection {
         pos: hit,
         normal: normal,
-        sphere_pos: sphere.pos,
+        // sphere_pos: sphere.pos,
         z: t0
     };
 
@@ -123,6 +123,6 @@ struct Ray {
 struct Intersection {
     pos: Vector3<f32>,
     normal: Vector3<f32>,
-    sphere_pos: Vector3<f32>,
+    // sphere_pos: Vector3<f32>,
     z: f32
 }

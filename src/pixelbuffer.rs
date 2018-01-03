@@ -41,15 +41,15 @@ impl PixelBuffer {
     //     }
     // }
 
-    pub fn print_pgm (&self) {
-        println!("P2");
-        println!("{} {}", self.width, self.height);
-        println!("255");
-        for y in 0..self.height {
-            for x in 0..self.width {
-                print!(" {}", self.get(x, y));
-            }
-            print!("\n");
-        }
-    }
+    // pub fn print_pgm (&self) {
+    //     println!("P2");
+    //     println!("{} {}", self.width, self.height);
+    //     println!("255");
+    //     for y in 0..self.height {
+    //         for x in 0..self.width {
+    //             print!(" {}", self.get(x, y));
+    //         }
+    //         print!("\n");
+    //     }
+    // }
 }
