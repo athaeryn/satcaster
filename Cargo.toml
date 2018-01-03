@@ -4,6 +4,11 @@ version = "0.1.0"
 authors = ["Mike Anderson <hello@mrmikea.com>"]
 
 [dependencies]
-cgmath = "0.7.0"
-rand = "0.3.13"
-noise = "0.4.1"
+# cgmath = "0.15.0"
+rand = "0.4"
+# noise = "0.4.1"
+stdweb = "0.3"
+
+[dependencies.cgmath]
+git = "https://github.com/brendanzab/cgmath"
+rev = "46e4039"

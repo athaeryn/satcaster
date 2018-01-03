@@ -3,18 +3,14 @@ use std::ops::Mul;
 use std::ops::Sub;
 use std::cmp::Ordering;
 
-use cgmath::Vector;
+use cgmath::prelude::*;
 use cgmath::Vector3;
-use cgmath::EuclideanVector;
-use noise::{NoiseModule, Perlin};
 
 use pixelbuffer::PixelBuffer;
 use scene::Scene;
 use sphere::Sphere;
 
 pub fn render(scene: &Scene, pixels: &mut PixelBuffer) {
-    let perlin = Perlin::new();
-
     let w = pixels.width as f32;
     let h = pixels.height as f32;
 
@@ -60,16 +56,7 @@ pub fn render(scene: &Scene, pixels: &mut PixelBuffer) {
 
                 let angle_to_light = light_dir.dot(intersection.normal);
 
-                let from_sphere = intersection.pos.sub(intersection.sphere_pos).normalize();
-                let foo = from_sphere.mul(16f32);
-                let val: f32 = perlin.get([from_sphere.x, from_sphere.y, from_sphere.z]);
-                let val2: f32 = perlin.get([foo.x, foo.y, foo.z]);
-
-                let mut base = ((val + val2) * 155f32) + 200f32;
-                if base > 255f32 { base = 255f32 }
-                if base < 0f32 { base = 0f32 }
-
-                let mut value = base * angle_to_light;
+                let mut value = 200f32 * angle_to_light;
                 if value > 255f32 { value = 255f32 }
                 if value < 0f32 { value = 0f32 }
                 pixels.set(x, y, value as i32);
@@ -108,7 +95,7 @@ fn get_intersction_dist (ray: &Ray, sphere: &Sphere) -> f32 {
     let l = sphere.pos.sub(ray.pos);
     let tca: f32 = l.dot(ray.dir);
     if tca < 0f32 { return no_intersection }
-    let d2 = l.length2() - tca * tca;
+    let d2 = l.magnitude2() - tca * tca;
     if d2 > sphere.rad { return no_intersection }
     let thc = (sphere.rad - d2).sqrt();
     let mut t0 = tca - thc;

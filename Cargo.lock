@@ -1,92 +1,111 @@
-[root]
-name = "satcaster"
-version = "0.1.0"
-dependencies = [
- "cgmath 0.7.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "noise 0.4.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "rand 0.3.13 (registry+https://github.com/rust-lang/crates.io-index)",
-]
+[[package]]
+name = "approx"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
-name = "advapi32-sys"
-version = "0.1.2"
+name = "bitflags"
+version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-dependencies = [
- "winapi 0.2.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "winapi-build 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
-]
 
 [[package]]
 name = "cgmath"
-version = "0.7.0"
+version = "0.15.0"
+source = "git+https://github.com/brendanzab/cgmath?rev=46e4039#46e4039a4d834d62a2779ec2a8be02fe20f76683"
+dependencies = [
+ "approx 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "num-traits 0.1.41 (registry+https://github.com/rust-lang/crates.io-index)",
+ "rand 0.4.1 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "dtoa"
+version = "0.4.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+
+[[package]]
+name = "fuchsia-zircon"
+version = "0.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "num 0.1.30 (registry+https://github.com/rust-lang/crates.io-index)",
- "rand 0.3.13 (registry+https://github.com/rust-lang/crates.io-index)",
- "rustc-serialize 0.3.16 (registry+https://github.com/rust-lang/crates.io-index)",
+ "bitflags 1.0.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "fuchsia-zircon-sys 0.3.2 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
+
+[[package]]
+name = "fuchsia-zircon-sys"
+version = "0.3.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+
+[[package]]
+name = "itoa"
+version = "0.3.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "libc"
-version = "0.2.4"
+version = "0.2.34"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-
-[[package]]
-name = "noise"
-version = "0.4.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-dependencies = [
- "num-traits 0.1.37 (registry+https://github.com/rust-lang/crates.io-index)",
- "rand 0.3.13 (registry+https://github.com/rust-lang/crates.io-index)",
-]
-
-[[package]]
-name = "num"
-version = "0.1.30"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-dependencies = [
- "rand 0.3.13 (registry+https://github.com/rust-lang/crates.io-index)",
- "rustc-serialize 0.3.16 (registry+https://github.com/rust-lang/crates.io-index)",
-]
 
 [[package]]
 name = "num-traits"
-version = "0.1.37"
+version = "0.1.41"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "rand"
-version = "0.3.13"
+version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "advapi32-sys 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
- "libc 0.2.4 (registry+https://github.com/rust-lang/crates.io-index)",
- "winapi 0.2.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "fuchsia-zircon 0.3.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "libc 0.2.34 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
-name = "rustc-serialize"
-version = "0.3.16"
+name = "satcaster"
+version = "0.1.0"
+dependencies = [
+ "cgmath 0.15.0 (git+https://github.com/brendanzab/cgmath?rev=46e4039)",
+ "rand 0.4.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "stdweb 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "serde"
+version = "1.0.27"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
-name = "winapi"
-version = "0.2.5"
+name = "serde_json"
+version = "1.0.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
+dependencies = [
+ "dtoa 0.4.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "itoa 0.3.4 (registry+https://github.com/rust-lang/crates.io-index)",
+ "num-traits 0.1.41 (registry+https://github.com/rust-lang/crates.io-index)",
+ "serde 1.0.27 (registry+https://github.com/rust-lang/crates.io-index)",
+]
 
 [[package]]
-name = "winapi-build"
-version = "0.1.1"
+name = "stdweb"
+version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
+dependencies = [
+ "serde 1.0.27 (registry+https://github.com/rust-lang/crates.io-index)",
+ "serde_json 1.0.9 (registry+https://github.com/rust-lang/crates.io-index)",
+]
 
 [metadata]
-"checksum advapi32-sys 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)" = "307c92332867e586720c0222ee9d890bbe8431711efed8a1b06bc5b40fc66bd7"
-"checksum cgmath 0.7.0 (registry+https://github.com/rust-lang/crates.io-index)" = "75e93b3eb66e74ffb946a69ff54c6026c1399960241c843f249ea0127b96b9f6"
-"checksum libc 0.2.4 (registry+https://github.com/rust-lang/crates.io-index)" = "10569e57695cc2c91ca4214357907649c9e242dc822c9ae623d0e0b0d68aa4d9"
-"checksum noise 0.4.1 (registry+https://github.com/rust-lang/crates.io-index)" = "77152bd10ae7b1dd2968c5dc7e4f4341ebe306bf8f48990c52fe1ae39a1d0033"
-"checksum num 0.1.30 (registry+https://github.com/rust-lang/crates.io-index)" = "29a08e74b98b17d5e321c2026fe554777b31904b2da0f9333b80cefc99f0b5ae"
-"checksum num-traits 0.1.37 (registry+https://github.com/rust-lang/crates.io-index)" = "e1cbfa3781f3fe73dc05321bed52a06d2d491eaa764c52335cf4399f046ece99"
-"checksum rand 0.3.13 (registry+https://github.com/rust-lang/crates.io-index)" = "2416b8bbd96336311c2ff9e6fca7338cc76a57a235d7a153aee88928a06b3657"
-"checksum rustc-serialize 0.3.16 (registry+https://github.com/rust-lang/crates.io-index)" = "1a48546a64cae47d06885e9bccadb99d0547d877a94c5167fa451ea33a484456"
-"checksum winapi 0.2.5 (registry+https://github.com/rust-lang/crates.io-index)" = "dc3583688b861fcd83c2823d37cf2cd2446c233dd7ba3f97884d1a7302817537"
-"checksum winapi-build 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)" = "2d315eee3b34aca4797b2da6b13ed88266e6d612562a0c46390af8299fc699bc"
+"checksum approx 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)" = "08abcc3b4e9339e33a3d0a5ed15d84a687350c05689d825e0f6655eef9e76a94"
+"checksum bitflags 1.0.1 (registry+https://github.com/rust-lang/crates.io-index)" = "b3c30d3802dfb7281680d6285f2ccdaa8c2d8fee41f93805dba5c4cf50dc23cf"
+"checksum cgmath 0.15.0 (git+https://github.com/brendanzab/cgmath?rev=46e4039)" = "<none>"
+"checksum dtoa 0.4.2 (registry+https://github.com/rust-lang/crates.io-index)" = "09c3753c3db574d215cba4ea76018483895d7bff25a31b49ba45db21c48e50ab"
+"checksum fuchsia-zircon 0.3.2 (registry+https://github.com/rust-lang/crates.io-index)" = "bd510087c325af53ba24f3be8f1c081b0982319adcb8b03cad764512923ccc19"
+"checksum fuchsia-zircon-sys 0.3.2 (registry+https://github.com/rust-lang/crates.io-index)" = "08b3a6f13ad6b96572b53ce7af74543132f1a7055ccceb6d073dd36c54481859"
+"checksum itoa 0.3.4 (registry+https://github.com/rust-lang/crates.io-index)" = "8324a32baf01e2ae060e9de58ed0bc2320c9a2833491ee36cd3b4c414de4db8c"
+"checksum libc 0.2.34 (registry+https://github.com/rust-lang/crates.io-index)" = "36fbc8a8929c632868295d0178dd8f63fc423fd7537ad0738372bd010b3ac9b0"
+"checksum num-traits 0.1.41 (registry+https://github.com/rust-lang/crates.io-index)" = "cacfcab5eb48250ee7d0c7896b51a2c5eec99c1feea5f32025635f5ae4b00070"
+"checksum rand 0.4.1 (registry+https://github.com/rust-lang/crates.io-index)" = "9d5f78082e6a6d042862611e9640cf20776185fee506cf6cf67e93c6225cee31"
+"checksum serde 1.0.27 (registry+https://github.com/rust-lang/crates.io-index)" = "db99f3919e20faa51bb2996057f5031d8685019b5a06139b1ce761da671b8526"
+"checksum serde_json 1.0.9 (registry+https://github.com/rust-lang/crates.io-index)" = "c9db7266c7d63a4c4b7fe8719656ccdd51acf1bed6124b174f933b009fb10bcb"
+"checksum stdweb 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)" = "7b9c504d47623c911c70686c17a3321a3400942e57970d2a2959a7b3b2ade630"

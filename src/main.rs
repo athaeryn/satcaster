@@ -1,5 +1,32 @@
+#![recursion_limit="2048"]
+
+#[macro_use]
+extern crate stdweb;
+
+use stdweb::web::{
+    self,
+    IEventTarget,
+    INode,
+    IElement,
+    FileReader,
+    FileReaderResult,
+    Element,
+    ArrayBuffer
+};
+
+use stdweb::web::event::{
+    IEvent,
+    IKeyboardEvent,
+    ClickEvent,
+    ChangeEvent,
+    ProgressLoadEvent,
+    KeydownEvent,
+    KeyupEvent,
+    KeyboardLocation
+};
+
+
 extern crate cgmath;
-extern crate noise;
 
 mod camera;
 mod ditherer;
@@ -17,6 +44,20 @@ use cgmath::Vector3;
 
 
 fn main() {
+    stdweb::initialize();
+
+    let canvas = web::document().get_element_by_id("viewport").unwrap();
+    let ctx: stdweb::Value = js!( return @{canvas}.getContext("2d"); );
+
+    let draw_box = |ctx: &stdweb::Value, color: &str, pos: (f32, f32)| {
+        js!(
+            @{ctx}.beginPath();
+            @{ctx}.rect(@{pos.0}, @{pos.1}, 1, 1);
+            @{ctx}.fillStyle = @{color};
+            @{ctx}.fill();
+        );
+    };
+
     let sphere1 = Sphere::new(2f32, (0f32, 0f32, -5f32));
     let sphere2 = Sphere::new(0.25f32, (-2.75f32, -0.5f32, -6f32));
     let camera = Camera::new(0f32, 0f32, 0f32);
@@ -33,6 +74,13 @@ fn main() {
     renderer::render(&scene, &mut pixels);
     ditherer::dither(&mut pixels);
 
-    // pixels.print_pbm();
-    pixels.print_pgm();
+    for y in 0..pixels.height {
+        for x in 0..pixels.width {
+            let value = pixels.get(x, y);
+            let color = if value == 0i32 { "black" } else { "white" };
+            draw_box(&ctx, color, (x as f32, y as f32));
+        }
+    }
+
+    stdweb::event_loop();
 }

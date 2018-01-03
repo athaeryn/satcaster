@@ -1,5 +1,3 @@
-extern crate rand;
-
 use pixelbuffer::PixelBuffer;
 
 pub fn dither (pixels: &mut PixelBuffer) {

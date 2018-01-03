@@ -3,9 +3,9 @@ satcaster
 
 ![render](renders/texture.png)
 
-
-```
-cargo build --release
-./target/release/satcaster > image.pgm
-convert image.pgm image.png
+```sh
+$ rustup toolchain install nightly
+$ rustup target add wasm32-unknown-unknown --toolchain nightly
+$ cargo +nightly install cargo-web
+$ cargo +nightly web start --target-webasm --release
 ```
